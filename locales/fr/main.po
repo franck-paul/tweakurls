@@ -1,25 +1,50 @@
-# Language: français
-# Module: tweakurls - 0.6
-# Date: 2009-05-07 15:16:17
+# Language: Français
+# Module: tweakurls - 0.7
+# Date: 2010-09-05 14:11:21
 # Author: xave/dotclear
-# Translated with dcTranslater - 0.2.4
+# Translated with translater 1.5
 
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-#: _admin.php:29
+#: _admin.php:35
 msgid "default mode"
 msgstr "mode par défaut"
 
-#: _admin.php:30
+#: _admin.php:36
 msgid "clean all diacritics"
 msgstr "supprimer tous les caractères diacritiques"
 
-#: _admin.php:31
+#: _admin.php:37
 msgid "Lowercase"
 msgstr "n'utiliser que des minuscules"
 
-#: _admin.php:37
+#: _admin.php:38
+msgid "Much more tidy"
+msgstr "encore plus propre"
+
+#: _admin.php:52
+#: _admin.php:185
 msgid "Posts URL type:"
-msgstr "Réglage du type d'URL :"
+msgstr "Réglage du type d'URL des billets :"
+
+#: _admin.php:56
+msgid "Categories URL type:"
+msgstr "Réglage du type d'URL des catégories :"
+
+#: _admin.php:129
+msgid "Clean URLs"
+msgstr "Nettoyer les URLs"
+
+#: _admin.php:182
+msgid "By changing the URLs, you understand that the old URLs will never be accessible."
+msgstr "En changeant les URLs, vous comprenez que les anciennes URLs ne seront plus jamais accessibles."
+
+#: _admin.php:183
+msgid "Internal links between posts will not work either."
+msgstr "Les liens internes entre les billets ne fonctionneront plus non plus."
+
+#: _admin.php:184
+msgid "The changes are irreversible."
+msgstr "Les changements sont irréversibles."
 
