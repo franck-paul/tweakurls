@@ -1,0 +1,25 @@
+# Language: français
+# Module: tweakurls - 0.6
+# Date: 2009-05-07 15:16:17
+# Author: xave/dotclear
+# Translated with dcTranslater - 0.2.4
+
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\n"
+
+#: _admin.php:29
+msgid "default mode"
+msgstr "mode par défaut"
+
+#: _admin.php:30
+msgid "clean all diacritics"
+msgstr "supprimer tous les caractères diacritiques"
+
+#: _admin.php:31
+msgid "Lowercase"
+msgstr "n'utiliser que des minuscules"
+
+#: _admin.php:37
+msgid "Posts URL type:"
+msgstr "Réglage du type d'URL :"
+
