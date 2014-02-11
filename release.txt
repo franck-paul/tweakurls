@@ -1,3 +1,7 @@
+0.9
+ * Entries actions adapted with the new action engine
+ * Various cosmetic
+
 0.8.1
  * Quick fixed category parent bug
  * Added bug on category having chidren (not change urls of children)

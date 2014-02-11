@@ -16,16 +16,16 @@
 
 $core->addBehavior('adminBlogPreferencesForm',array('tweakurlsAdminBehaviours','adminBlogPreferencesForm'));
 $core->addBehavior('adminBeforeBlogSettingsUpdate',array('tweakurlsAdminBehaviours','adminBeforeBlogSettingsUpdate'));
+
 $core->addBehavior('adminAfterPostCreate',array('tweakurlsAdminBehaviours','adminAfterPostSave'));
 $core->addBehavior('adminAfterPageUpdate',array('tweakurlsAdminBehaviours','adminAfterPostSave'));
 $core->addBehavior('adminAfterPageCreate',array('tweakurlsAdminBehaviours','adminAfterPostSave'));
 $core->addBehavior('adminAfterPostUpdate',array('tweakurlsAdminBehaviours','adminAfterPostSave'));
 $core->addBehavior('adminAfterCategoryCreate',array('tweakurlsAdminBehaviours','adminAfterCategorySave'));
 $core->addBehavior('adminAfterCategoryUpdate',array('tweakurlsAdminBehaviours','adminAfterCategorySave'));
-$core->addBehavior('adminPostsActionsCombo',array('tweakurlsAdminBehaviours','adminPostsActionsCombo'));
-$core->addBehavior('adminPagesActionsCombo',array('tweakurlsAdminBehaviours','adminPostsActionsCombo'));
-$core->addBehavior('adminPostsActions',array('tweakurlsAdminBehaviours','adminPostsActions'));
-$core->addBehavior('adminPostsActionsContent',array('tweakurlsAdminBehaviours','adminPostsActionsContent'));
+
+$core->addBehavior('adminPostsActionsPage',array('tweakurlsAdminBehaviours','adminPostsActionsPage'));
+$core->addBehavior('adminPagesActionsPage',array('tweakurlsAdminBehaviours','adminPagesActionsPage'));
 
 class tweakurlsAdminBehaviours
 {
@@ -46,18 +46,16 @@ class tweakurlsAdminBehaviours
 		# URL modes
 		$tweakurls_combo = self::tweakurls_combo();
 		echo
-		'<fieldset><legend>Tweak URLs</legend>'.
-		'<div>'.
-		'<p><label>'.
+		'<div class="fieldset"><h4>Tweak URLs</h4>'.
+		'<p><label for="tweakurls_posturltransform">'.
 		__('Posts URL type:')." ".
 		form::combo('tweakurls_posturltransform',$tweakurls_combo,$tweekurls_settings->tweakurls_posturltransform).
 		'</label></p>'.
-		'<p><label>'.
+		'<p><label for="tweakurls_caturltransform">'.
 		__('Categories URL type:')." ".
 		form::combo('tweakurls_caturltransform',$tweakurls_combo,$tweekurls_settings->tweakurls_caturltransform).
 		'</label></p>'.
-		'</div>'.
-		'</fieldset>';
+		'</div>';
 	}
 	public static function adminBeforeBlogSettingsUpdate($settings)
 	{
@@ -100,23 +98,45 @@ class tweakurlsAdminBehaviours
 		}
 	}
 
-	public static function adminPostsActionsCombo($combo_action)
+	public static function adminPostsActionsPage($core,$ap)
 	{
-		global $core;
-
-		if ($core->auth->check('admin',$core->blog->id))
-		{
-			$combo_action[0][__('Change')][__('Clean URLs')] = 'cleanurls';
+		// Add menuitem in actions dropdown list
+		if ($core->auth->check('admin',$core->blog->id)) {
+			$ap->addAction(
+				array(__('Change') => array(__('Clean URLs') => 'cleanurls')),
+				array('tweakurlsAdminBehaviours','adminPostsDoReplacements')
+			);
 		}
 	}
 
-	public static function adminPostsActions($core,$posts,$action,$redir)
+	public static function adminPagesActionsPage($core,$ap)
 	{
-		if ($action == 'confirmcleanurls' && $core->auth->check('admin',$core->blog->id)
-		&& !empty($_POST['posturltransform']) && $_POST['posturltransform'] != 'default')
-		{
-			try
-			{
+		// Add menuitem in actions dropdown list
+		if ($core->auth->check('admin',$core->blog->id)) {
+			$ap->addAction(
+				array(__('Change') => array(__('Clean URLs') => 'cleanurls')),
+				array('tweakurlsAdminBehaviours','adminPagesDoReplacements')
+			);
+		}
+	}
+
+	public static function adminPostsDoReplacements($core,dcPostsActionsPage $ap,$post)
+	{
+		self::adminEntriesDoReplacements($core,$ap,$post,'post');
+	}
+
+	public static function adminPagesDoReplacements($core,dcPostsActionsPage $ap,$post)
+	{
+		self::adminEntriesDoReplacements($core,$ap,$post,'page');
+	}
+
+	public static function adminEntriesDoReplacements($core,dcPostsActionsPage $ap,$post,$type='post')
+	{
+		if (!empty($post['confirmcleanurls']) && $core->auth->check('admin',$core->blog->id) &&
+			!empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
+			// Do replacements
+			$posts = $ap->getRS();
+			if ($posts->rows()) {
 				while ($posts->fetch())
 				{
 					$cur = $core->con->openCursor($core->prefix.'post');
@@ -128,35 +148,52 @@ class tweakurlsAdminBehaviours
 						$cur->update('WHERE post_id = '.(integer) $posts->post_id);
 					}
 				}
-				http::redirect($redir);
+				$ap->redirect(true,array('upd' => 1));
+			} else {
+				$ap->redirect();
 			}
-			catch (Exception $e)
-			{
-				$core->error->add($e->getMessage());
+		} else {
+			// Ask confirmation for replacements
+			if ($type == 'page') {
+				$ap->beginPage(
+					dcPage::breadcrumb(
+						array(
+							html::escapeHTML($core->blog->name) => '',
+							__('Pages') => 'plugin.php?p=pages',
+							__('Clean URLs') => ''
+				)));
+			} else {
+				$ap->beginPage(
+					dcPage::breadcrumb(
+						array(
+							html::escapeHTML($core->blog->name) => '',
+							__('Entries') => 'posts.php',
+							__('Clean URLs') => ''
+			)));
 			}
-		}
-	}
 
-	public static function adminPostsActionsContent($core,$action,$hidden_fields)
-	{
-		if ($action == 'cleanurls')
-		{
 			echo
-			'<form action="posts_actions.php" method="post">'.
-			'<h2>Tweak URLs</h2>'.
+			'<form action="'.$ap->getURI().'" method="post">'.
+
 			'<p>'.
 			__('By changing the URLs, you understand that the old URLs will never be accessible.').'<br />'.
 			__('Internal links between posts will not work either.').'<br />'.
 			__('The changes are irreversible.').'</p>'.
+
 			'<p><label>'.__('Posts URL type:').' '.
 			form::combo('posturltransform',self::tweakurls_combo(),'default').
 			'</label></p>'.
-			'<p>'.
-			$hidden_fields.
-			$core->formNonce().
-			form::hidden(array('action'),'confirmcleanurls').
-			'<input type="submit" value="'.__('save').'" /></p>'.
+
+			$ap->getCheckboxes().
+
+			'<p><input type="submit" value="'.__('save').'" /></p>'.
+
+			$core->formNonce().$ap->getHiddenFields().
+			form::hidden(array('confirmcleanurls'),'true').
+			form::hidden(array('action'),'cleanurls').
 			'</form>';
+
+			$ap->endPage();
 		}
 	}
 }

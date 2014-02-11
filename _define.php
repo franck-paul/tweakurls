@@ -20,6 +20,6 @@ $this->registerModule(
 	/* Name */			"tweakURLs",
 	/* Description*/		"Tweaks you posts URLs",
 	/* Author */			"xave",
-	/* Version */			'0.8.1',
+	/* Version */			'0.9',
 	/* Permissions */		'admin'
 );
