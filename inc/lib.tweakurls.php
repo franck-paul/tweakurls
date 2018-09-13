@@ -16,7 +16,7 @@
 class tweakUrls extends text
 {
     /** @ignore */
-    protected static $tweakurls_settings = array();
+    protected static $tweakurls_settings = [];
 
     /**
      * String to URL
@@ -105,11 +105,11 @@ class tweakUrls extends text
                 $s_replace = '-';
             }
 
-            self::$tweakurls_settings = array(
+            self::$tweakurls_settings = [
                 'format'  => $s_format,
                 'search'  => $s_search,
                 'replace' => $s_replace
-            );
+            ];
         }
         $tweakurls_settings = self::$tweakurls_settings;
 

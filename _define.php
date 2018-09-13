@@ -17,6 +17,10 @@ $this->registerModule(
     "tweakURLs",             // Name
     "Tweaks you posts URLs", // Description
     "xave",                  // Author
-    '1.0',                   // Version
-    'admin'                  // Permissions
+    '1.1',                   // Version
+    [
+        'requires'    => [['core', '2.13']], // Dependencies
+        'permissions' => 'admin',            // Permissions
+        'type'        => 'plugin'           // Type
+    ]
 );

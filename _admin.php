@@ -11,29 +11,29 @@
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-$core->addBehavior('adminBlogPreferencesForm', array('tweakurlsAdminBehaviours', 'adminBlogPreferencesForm'));
-$core->addBehavior('adminBeforeBlogSettingsUpdate', array('tweakurlsAdminBehaviours', 'adminBeforeBlogSettingsUpdate'));
+$core->addBehavior('adminBlogPreferencesForm', ['tweakurlsAdminBehaviours', 'adminBlogPreferencesForm']);
+$core->addBehavior('adminBeforeBlogSettingsUpdate', ['tweakurlsAdminBehaviours', 'adminBeforeBlogSettingsUpdate']);
 
-$core->addBehavior('adminAfterPostCreate', array('tweakurlsAdminBehaviours', 'adminAfterPostSave'));
-$core->addBehavior('adminAfterPageUpdate', array('tweakurlsAdminBehaviours', 'adminAfterPostSave'));
-$core->addBehavior('adminAfterPageCreate', array('tweakurlsAdminBehaviours', 'adminAfterPostSave'));
-$core->addBehavior('adminAfterPostUpdate', array('tweakurlsAdminBehaviours', 'adminAfterPostSave'));
-$core->addBehavior('adminAfterCategoryCreate', array('tweakurlsAdminBehaviours', 'adminAfterCategorySave'));
-$core->addBehavior('adminAfterCategoryUpdate', array('tweakurlsAdminBehaviours', 'adminAfterCategorySave'));
+$core->addBehavior('adminAfterPostCreate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
+$core->addBehavior('adminAfterPageUpdate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
+$core->addBehavior('adminAfterPageCreate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
+$core->addBehavior('adminAfterPostUpdate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
+$core->addBehavior('adminAfterCategoryCreate', ['tweakurlsAdminBehaviours', 'adminAfterCategorySave']);
+$core->addBehavior('adminAfterCategoryUpdate', ['tweakurlsAdminBehaviours', 'adminAfterCategorySave']);
 
-$core->addBehavior('adminPostsActionsPage', array('tweakurlsAdminBehaviours', 'adminPostsActionsPage'));
-$core->addBehavior('adminPagesActionsPage', array('tweakurlsAdminBehaviours', 'adminPagesActionsPage'));
+$core->addBehavior('adminPostsActionsPage', ['tweakurlsAdminBehaviours', 'adminPostsActionsPage']);
+$core->addBehavior('adminPagesActionsPage', ['tweakurlsAdminBehaviours', 'adminPagesActionsPage']);
 
 class tweakurlsAdminBehaviours
 {
     public static function tweakurls_combo()
     {
-        return array(
+        return [
             __('default mode')         => 'default',
             __('clean all diacritics') => 'nodiacritic',
             __('Lowercase')            => 'lowercase',
             __('Much more tidy')       => 'mtidy'
-        );
+        ];
     }
 
     public static function adminBlogPreferencesForm($core, $settings)
@@ -98,8 +98,8 @@ class tweakurlsAdminBehaviours
         // Add menuitem in actions dropdown list
         if ($core->auth->check('admin', $core->blog->id)) {
             $ap->addAction(
-                array(__('Change') => array(__('Clean URLs') => 'cleanurls')),
-                array('tweakurlsAdminBehaviours', 'adminPostsDoReplacements')
+                [__('Change') => [__('Clean URLs') => 'cleanurls']],
+                ['tweakurlsAdminBehaviours', 'adminPostsDoReplacements']
             );
         }
     }
@@ -109,8 +109,8 @@ class tweakurlsAdminBehaviours
         // Add menuitem in actions dropdown list
         if ($core->auth->check('admin', $core->blog->id)) {
             $ap->addAction(
-                array(__('Change') => array(__('Clean URLs') => 'cleanurls')),
-                array('tweakurlsAdminBehaviours', 'adminPagesDoReplacements')
+                [__('Change') => [__('Clean URLs') => 'cleanurls']],
+                ['tweakurlsAdminBehaviours', 'adminPagesDoReplacements']
             );
         }
     }
@@ -142,7 +142,7 @@ class tweakurlsAdminBehaviours
                         $cur->update('WHERE post_id = ' . (integer) $posts->post_id);
                     }
                 }
-                $ap->redirect(true, array('upd' => 1));
+                $ap->redirect(true, ['upd' => 1]);
             } else {
                 $ap->redirect();
             }
@@ -151,19 +151,19 @@ class tweakurlsAdminBehaviours
             if ($type == 'page') {
                 $ap->beginPage(
                     dcPage::breadcrumb(
-                        array(
+                        [
                             html::escapeHTML($core->blog->name) => '',
                             __('Pages')                         => 'plugin.php?p=pages',
                             __('Clean URLs')                    => ''
-                        )));
+                        ]));
             } else {
                 $ap->beginPage(
                     dcPage::breadcrumb(
-                        array(
+                        [
                             html::escapeHTML($core->blog->name) => '',
                             __('Entries')                       => 'posts.php',
                             __('Clean URLs')                    => ''
-                        )));
+                        ]));
             }
 
             echo
@@ -183,8 +183,8 @@ class tweakurlsAdminBehaviours
             '<p><input type="submit" value="' . __('save') . '" /></p>' .
 
             $core->formNonce() . $ap->getHiddenFields() .
-            form::hidden(array('confirmcleanurls'), 'true') .
-            form::hidden(array('action'), 'cleanurls') .
+            form::hidden(['confirmcleanurls'], 'true') .
+            form::hidden(['action'], 'cleanurls') .
                 '</form>';
 
             $ap->endPage();

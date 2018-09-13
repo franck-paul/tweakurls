@@ -14,11 +14,11 @@
 if (!defined('DC_RC_PATH')) {return;}
 
 // coreAfterCategoryCreate
-$core->addBehavior('coreAfterCategoryCreate', array('tweakurlsXmlrpcBehaviours', 'coreAfterCategorySave'));
+$core->addBehavior('coreAfterCategoryCreate', ['tweakurlsXmlrpcBehaviours', 'coreAfterCategorySave']);
 
 // coreAfterPostCreate, coreAfterPostUpdate
-$core->addBehavior('coreAfterPostCreate', array('tweakurlsXmlrpcBehaviours', 'coreAfterPostSave'));
-$core->addBehavior('coreAfterPostUpdate', array('tweakurlsXmlrpcBehaviours', 'coreAfterPostSave'));
+$core->addBehavior('coreAfterPostCreate', ['tweakurlsXmlrpcBehaviours', 'coreAfterPostSave']);
+$core->addBehavior('coreAfterPostUpdate', ['tweakurlsXmlrpcBehaviours', 'coreAfterPostSave']);
 
 class tweakurlsXmlrpcBehaviours
 {
