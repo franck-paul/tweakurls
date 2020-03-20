@@ -19,8 +19,9 @@ $this->registerModule(
     "xave",                  // Author
     '1.1',                   // Version
     [
-        'requires'    => [['core', '2.13']], // Dependencies
-        'permissions' => 'admin',            // Permissions
-        'type'        => 'plugin'           // Type
+        'requires'    => [['core', '2.13']],                         // Dependencies
+        'permissions' => 'admin',                                    // Permissions
+        'support'     => 'https://github.com/franck-paul/tweakurls', // Support URL
+        'type'        => 'plugin'                                   // Type
     ]
 );
