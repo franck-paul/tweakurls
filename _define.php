@@ -20,7 +20,7 @@ $this->registerModule(
     '1.1',                   // Version
     [
         'requires'    => [['core', '2.13']],                         // Dependencies
-        'permissions' => 'admin',                                    // Permissions
+        'permissions' => 'usage,admin',                              // Permissions
         'support'     => 'https://github.com/franck-paul/tweakurls', // Support URL
         'type'        => 'plugin'                                   // Type
     ]
