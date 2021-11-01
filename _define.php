@@ -26,6 +26,6 @@ $this->registerModule(
 
         'details'    => 'https://open-time.net/?q=tweakurls',       // Details URL
         'support'    => 'https://github.com/franck-paul/tweakurls', // Support URL
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/tweakurls/main/dcstore.xml'
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/tweakurls/master/dcstore.xml'
     ]
 );
