@@ -1,8 +1,8 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="tweakurls">
-    <name>Tweaks you posts URLs</name>
+    <name>tweakURLs</name>
     <version>1.1</version>
-    <author>Tweaks you posts URLs</author>
+    <author>xave</author>
     <desc>Tweaks you posts URLs</desc>
     <file>https://github.com/franck-paul/tweakurls/releases/download/1.1/plugin-tweakurls-1.1.zip</file>
     <da:dcmin>2.13</da:dcmin>
