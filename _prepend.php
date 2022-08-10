@@ -10,20 +10,16 @@
  * @copyright xave
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_RC_PATH')) {return;}
+if (!defined('DC_RC_PATH')) {
+    return;
+}
 
 global $__autoload;
-$__autoload['tweakUrls'] = dirname(__FILE__) . '/inc/lib.tweakurls.php';
+$__autoload['tweakUrls'] = __DIR__ . '/inc/lib.tweakurls.php';
 
-# Keep compatibility with Dotclear < 2.2
-function tweakurlsSettings($core, $ns = 'tweakurls')
+function tweakurlsSettings($core = null, $ns = 'tweakurls')
 {
-    if (version_compare(DC_VERSION, '2.2-alpha', '>=')) {
-        $core->blog->settings->addNamespace($ns);
-        return $core->blog->settings->{$ns};
-    } else {
-        $core->blog->settings->setNamespace($ns);
-        return $core->blog->settings;
-    }
+    dcCore::app()->blog->settings->addNamespace($ns);
+
+    return dcCore::app()->blog->settings->{$ns};
 }

@@ -10,34 +10,31 @@
  * @copyright xave
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_RC_PATH')) {return;}
+if (!defined('DC_RC_PATH')) {
+    return;
+}
 
 // coreAfterCategoryCreate
-$core->addBehavior('coreAfterCategoryCreate', ['tweakurlsXmlrpcBehaviours', 'coreAfterCategorySave']);
+dcCore::app()->addBehavior('coreAfterCategoryCreate', ['tweakurlsXmlrpcBehaviours', 'coreAfterCategorySave']);
 
 // coreAfterPostCreate, coreAfterPostUpdate
-$core->addBehavior('coreAfterPostCreate', ['tweakurlsXmlrpcBehaviours', 'coreAfterPostSave']);
-$core->addBehavior('coreAfterPostUpdate', ['tweakurlsXmlrpcBehaviours', 'coreAfterPostSave']);
+dcCore::app()->addBehavior('coreAfterPostCreate', ['tweakurlsXmlrpcBehaviours', 'coreAfterPostSave']);
+dcCore::app()->addBehavior('coreAfterPostUpdate', ['tweakurlsXmlrpcBehaviours', 'coreAfterPostSave']);
 
 class tweakurlsXmlrpcBehaviours
 {
     public static function coreAfterPostSave($cur)
     {
-        global $core;
-
         if ($cur->post_id) {
             $cur->post_url = tweakUrls::tweakBlogURL($cur->post_url);
-            $core->blog->updPost($cur->post_id, $cur);
+            dcCore::app()->blog->updPost($cur->post_id, $cur);
         }
     }
 
     public static function coreAfterCategorySave($cur)
     {
-        global $core;
-
         if ($cur->cat_id) {
-            $tweekurls_settings = tweakurlsSettings($core);
+            $tweekurls_settings = tweakurlsSettings(dcCore::app());
             $caturltransform    = $tweekurls_settings->tweakurls_caturltransform;
 
             // if it is a sub-category, change only last part of its url
@@ -46,7 +43,7 @@ class tweakurlsXmlrpcBehaviours
             $urls[]  = tweakUrls::tweakBlogURL($cat_url, $caturltransform);
             $urls    = implode('/', $urls);
 
-            $new_cur          = $core->con->openCursor($core->prefix . 'category');
+            $new_cur          = dcCore::app()->con->openCursor(dcCore::app()->prefix . 'category');
             $new_cur->cat_url = $urls;
             $new_cur->update('WHERE cat_id = ' . $cur->cat_id);
         }

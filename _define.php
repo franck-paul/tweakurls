@@ -18,14 +18,14 @@ $this->registerModule(
     'tweakURLs',             // Name
     'Tweaks you posts URLs', // Description
     'xave',                  // Author
-    '1.1',                   // Version
+    '1.2',                   // Version
     [
-        'requires'    => [['core', '2.13']],                         // Dependencies
+        'requires'    => [['core', '2.23']],                         // Dependencies
         'permissions' => 'usage,admin',                              // Permissions
         'type'        => 'plugin',                                   // Type
 
         'details'    => 'https://open-time.net/?q=tweakurls',       // Details URL
         'support'    => 'https://github.com/franck-paul/tweakurls', // Support URL
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/tweakurls/master/dcstore.xml'
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/tweakurls/master/dcstore.xml',
     ]
 );

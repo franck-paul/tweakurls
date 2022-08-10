@@ -12,7 +12,6 @@
  * @copyright xave
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 class tweakUrls extends text
 {
     /** @ignore */
@@ -70,7 +69,7 @@ class tweakUrls extends text
         $str = preg_replace('/([' . $quoted_replace . ']{2,})/', $replace, $str);
 
         // Remove end $replace
-        return rtrim($str, $replace);
+        return rtrim((string) $str, $replace);
     }
 
     /**
@@ -88,7 +87,7 @@ class tweakUrls extends text
     {
         # Read blog settings
         if (empty(self::$tweakurls_settings)) {
-            $s = tweakurlsSettings($GLOBALS['core']);
+            $s = tweakurlsSettings(dcCore::app());
 
             $s_format = (string) $s->tweakurls_posturltransform;
             if (empty($s_format)) {
@@ -108,7 +107,7 @@ class tweakUrls extends text
             self::$tweakurls_settings = [
                 'format'  => $s_format,
                 'search'  => $s_search,
-                'replace' => $s_replace
+                'replace' => $s_replace,
             ];
         }
         $tweakurls_settings = self::$tweakurls_settings;
@@ -128,13 +127,16 @@ class tweakUrls extends text
         switch ($format) {
             case 'nodiacritic':
                 $str = self::nodiacriticURL($str);
+
                 break;
             case 'lowercase':
                 $str = self::lowercaseURL($str);
+
                 break;
             case 'mtidy':
             case 'neat':
                 $str = self::neatURL($str, $search, $replace);
+
                 break;
         }
 
