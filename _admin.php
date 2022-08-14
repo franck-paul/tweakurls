@@ -35,7 +35,7 @@ class tweakurlsAdminBehaviours
         ];
     }
 
-    public static function adminBlogPreferencesForm($core = null, $settings)
+    public static function adminBlogPreferencesForm($core, $settings)
     {
         $tweekurls_settings = tweakurlsSettings(dcCore::app());
 
@@ -88,7 +88,7 @@ class tweakurlsAdminBehaviours
         }
     }
 
-    public static function adminPostsActionsPage($core = null, $ap)
+    public static function adminPostsActionsPage($core, $ap)
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check('admin', dcCore::app()->blog->id)) {
@@ -99,7 +99,7 @@ class tweakurlsAdminBehaviours
         }
     }
 
-    public static function adminPagesActionsPage($core = null, $ap)
+    public static function adminPagesActionsPage($core, $ap)
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check('admin', dcCore::app()->blog->id)) {
@@ -110,17 +110,17 @@ class tweakurlsAdminBehaviours
         }
     }
 
-    public static function adminPostsDoReplacements($core = null, dcPostsActionsPage $ap, $post)
+    public static function adminPostsDoReplacements($core, dcPostsActionsPage $ap, $post)
     {
         self::adminEntriesDoReplacements(dcCore::app(), $ap, $post, 'post');
     }
 
-    public static function adminPagesDoReplacements($core = null, dcPostsActionsPage $ap, $post)
+    public static function adminPagesDoReplacements($core, dcPostsActionsPage $ap, $post)
     {
         self::adminEntriesDoReplacements(dcCore::app(), $ap, $post, 'page');
     }
 
-    public static function adminEntriesDoReplacements($core = null, dcPostsActionsPage $ap, $post, $type = 'post')
+    public static function adminEntriesDoReplacements($core, dcPostsActionsPage $ap, $post, $type = 'post')
     {
         if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check('admin', dcCore::app()->blog->id) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
             // Do replacements
