@@ -1,10 +1,10 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="tweakurls">
     <name>tweakURLs</name>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <author>xave</author>
     <desc>Tweaks you posts URLs</desc>
-    <file>https://github.com/franck-paul/tweakurls/releases/download/1.2/plugin-tweakurls-1.2.zip</file>
+    <file>https://github.com/franck-paul/tweakurls/releases/download/1.2.1/plugin-tweakurls-1.2.1.zip</file>
     <da:dcmin>2.23</da:dcmin>
     <da:details>https://open-time.net/?q=tweakurls</da:details>
     <da:support>https://github.com/franck-paul/tweakurls</da:support>
