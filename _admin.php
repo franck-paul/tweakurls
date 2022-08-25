@@ -35,9 +35,9 @@ class tweakurlsAdminBehaviours
         ];
     }
 
-    public static function adminBlogPreferencesForm($core, $settings)
+    public static function adminBlogPreferencesForm()
     {
-        $tweekurls_settings = tweakurlsSettings(dcCore::app());
+        $tweekurls_settings = tweakUrls::tweakurlsSettings();
 
         # URL modes
         $tweakurls_combo = self::tweakurls_combo();
@@ -53,9 +53,9 @@ class tweakurlsAdminBehaviours
             '</label></p>' .
             '</div>';
     }
-    public static function adminBeforeBlogSettingsUpdate($settings)
+    public static function adminBeforeBlogSettingsUpdate()
     {
-        $tweekurls_settings = tweakurlsSettings(dcCore::app());
+        $tweekurls_settings = tweakUrls::tweakurlsSettings();
         $tweekurls_settings->put('tweakurls_posturltransform', $_POST['tweakurls_posturltransform']);
         $tweekurls_settings->put('tweakurls_caturltransform', $_POST['tweakurls_caturltransform']);
     }
@@ -70,7 +70,7 @@ class tweakurlsAdminBehaviours
 
     public static function adminAfterCategorySave($cur, $id)
     {
-        $tweekurls_settings = tweakurlsSettings(dcCore::app());
+        $tweekurls_settings = tweakUrls::tweakurlsSettings();
         $caturltransform    = $tweekurls_settings->tweakurls_caturltransform;
 
         if (isset($_POST['cat_url']) || empty($_REQUEST['id'])) {

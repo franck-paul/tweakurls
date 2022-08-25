@@ -14,12 +14,4 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-global $__autoload;
 $__autoload['tweakUrls'] = __DIR__ . '/inc/lib.tweakurls.php';
-
-function tweakurlsSettings($core, $ns = 'tweakurls')
-{
-    dcCore::app()->blog->settings->addNamespace($ns);
-
-    return dcCore::app()->blog->settings->{$ns};
-}

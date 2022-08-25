@@ -34,7 +34,7 @@ class tweakurlsXmlrpcBehaviours
     public static function coreAfterCategorySave($cur)
     {
         if ($cur->cat_id) {
-            $tweekurls_settings = tweakurlsSettings(dcCore::app());
+            $tweekurls_settings = tweakUrls::tweakurlsSettings();
             $caturltransform    = $tweekurls_settings->tweakurls_caturltransform;
 
             // if it is a sub-category, change only last part of its url

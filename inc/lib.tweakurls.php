@@ -17,6 +17,13 @@ class tweakUrls extends text
     /** @ignore */
     protected static $tweakurls_settings = [];
 
+    public static function tweakurlsSettings()
+    {
+        dcCore::app()->blog->settings->addNamespace('tweakurls');
+
+        return dcCore::app()->blog->settings->tweakurls;
+    }
+
     /**
      * String to URL
      *
@@ -87,7 +94,7 @@ class tweakUrls extends text
     {
         # Read blog settings
         if (empty(self::$tweakurls_settings)) {
-            $s = tweakurlsSettings(dcCore::app());
+            $s = self::tweakurlsSettings();
 
             $s_format = (string) $s->tweakurls_posturltransform;
             if (empty($s_format)) {
@@ -137,6 +144,9 @@ class tweakUrls extends text
             case 'neat':
                 $str = self::neatURL($str, $search, $replace);
 
+                break;
+
+            default:
                 break;
         }
 

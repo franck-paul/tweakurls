@@ -21,7 +21,7 @@ if (version_compare($installed_version, $this_version, '>=')) {
     return;
 }
 
-$settings = tweakurlsSettings(dcCore::app());
+$settings = tweakUrls::tweakurlsSettings();
 $settings->put('tweakurls_posturltransform', '', 'string', 'determines posts URL type.', false, true);
 $settings->put('tweakurls_caturltransform', '', 'string', 'determines categories URL type.', false, true);
 $settings->put('tweakurls_mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
