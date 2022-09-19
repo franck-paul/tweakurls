@@ -20,7 +20,7 @@ $this->registerModule(
     'xave',                  // Author
     '1.2.1',
     [
-        'requires'    => [['core', '2.23']],                         // Dependencies
+        'requires'    => [['core', '2.24']],                         // Dependencies
         'permissions' => 'usage,admin',                              // Permissions
         'type'        => 'plugin',                                   // Type
 
