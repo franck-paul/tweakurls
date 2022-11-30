@@ -10,19 +10,6 @@
  * @copyright xave
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-dcCore::app()->addBehavior('adminBlogPreferencesForm', ['tweakurlsAdminBehaviours', 'adminBlogPreferencesForm']);
-dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', ['tweakurlsAdminBehaviours', 'adminBeforeBlogSettingsUpdate']);
-
-dcCore::app()->addBehavior('adminAfterPostCreate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterPageUpdate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterPageCreate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterPostUpdate', ['tweakurlsAdminBehaviours', 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterCategoryCreate', ['tweakurlsAdminBehaviours', 'adminAfterCategorySave']);
-dcCore::app()->addBehavior('adminAfterCategoryUpdate', ['tweakurlsAdminBehaviours', 'adminAfterCategorySave']);
-
-dcCore::app()->addBehavior('adminPostsActions', ['tweakurlsAdminBehaviours', 'adminPostsActionsPage']);
-dcCore::app()->addBehavior('adminPagesActions', ['tweakurlsAdminBehaviours', 'adminPagesActionsPage']);
-
 class tweakurlsAdminBehaviours
 {
     public static function tweakurls_combo()
@@ -80,7 +67,7 @@ class tweakurlsAdminBehaviours
             $urls[]  = tweakUrls::tweakBlogURL($cat_url, $caturltransform);
             $urls    = implode('/', $urls);
 
-            $new_cur          = dcCore::app()->con->openCursor(dcCore::app()->prefix . 'category');
+            $new_cur          = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcCategories::CATEGORY_TABLE_NAME);
             $new_cur->cat_url = $urls;
             $new_cur->update('WHERE cat_id = ' . $id);
 
@@ -88,10 +75,12 @@ class tweakurlsAdminBehaviours
         }
     }
 
-    public static function adminPostsActionsPage(dcPostsActions $ap)
+    public static function adminPostsActions(dcPostsActions $ap)
     {
         // Add menuitem in actions dropdown list
-        if (dcCore::app()->auth->check('admin', dcCore::app()->blog->id)) {
+        if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_ADMIN,
+        ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
                 ['tweakurlsAdminBehaviours', 'adminPostsDoReplacements']
@@ -99,10 +88,12 @@ class tweakurlsAdminBehaviours
         }
     }
 
-    public static function adminPagesActionsPage(dcPagesActions $ap)
+    public static function adminPagesActions(dcPagesActions $ap)
     {
         // Add menuitem in actions dropdown list
-        if (dcCore::app()->auth->check('admin', dcCore::app()->blog->id)) {
+        if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_ADMIN,
+        ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
                 ['tweakurlsAdminBehaviours', 'adminPagesDoReplacements']
@@ -122,12 +113,14 @@ class tweakurlsAdminBehaviours
 
     public static function adminEntriesDoReplacements($ap, arrayObject $post, $type = 'post')
     {
-        if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check('admin', dcCore::app()->blog->id) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
+        if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_ADMIN,
+        ]), dcCore::app()->blog->id) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
             // Do replacements
             $posts = $ap->getRS();
             if ($posts->rows()) {
                 while ($posts->fetch()) {
-                    $cur           = dcCore::app()->con->openCursor(dcCore::app()->prefix . 'post');
+                    $cur           = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcBlog::POST_TABLE_NAME);
                     $cur->post_url = $posts->post_url;
 
                     $cur->post_url = tweakUrls::tweakBlogURL($cur->post_url);
@@ -189,3 +182,16 @@ class tweakurlsAdminBehaviours
         }
     }
 }
+
+dcCore::app()->addBehavior('adminBlogPreferencesFormV2', [tweakurlsAdminBehaviours::class, 'adminBlogPreferencesForm']);
+dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', [tweakurlsAdminBehaviours::class, 'adminBeforeBlogSettingsUpdate']);
+
+dcCore::app()->addBehavior('adminAfterPostCreate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
+dcCore::app()->addBehavior('adminAfterPageUpdate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
+dcCore::app()->addBehavior('adminAfterPageCreate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
+dcCore::app()->addBehavior('adminAfterPostUpdate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
+dcCore::app()->addBehavior('adminAfterCategoryCreate', [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave']);
+dcCore::app()->addBehavior('adminAfterCategoryUpdate', [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave']);
+
+dcCore::app()->addBehavior('adminPostsActions', [tweakurlsAdminBehaviours::class, 'adminPostsActions']);
+dcCore::app()->addBehavior('adminPagesActions', [tweakurlsAdminBehaviours::class, 'adminPagesActions']);

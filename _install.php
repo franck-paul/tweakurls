@@ -17,7 +17,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 $this_version      = dcCore::app()->plugins->moduleInfo('tweakurls', 'version');
 $installed_version = dcCore::app()->getVersion('tweakurls');
 
-if (version_compare($installed_version, $this_version, '>=')) {
+if (version_compare((string) $installed_version, $this_version, '>=')) {
     return;
 }
 
@@ -26,6 +26,15 @@ $settings->put('tweakurls_posturltransform', '', 'string', 'determines posts URL
 $settings->put('tweakurls_caturltransform', '', 'string', 'determines categories URL type.', false, true);
 $settings->put('tweakurls_mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
 $settings->put('tweakurls_mtidyremove', "_ ':[]-", 'string', 'Last exotic chars to remove for mtidy mode.', false, true);
+
+if (version_compare((string) $installed_version, '1.3', '<')) {
+    try {
+        // Some cleanup is needed
+        @unlink(__DIR__ . DIRECTORY_SEPARATOR . '_xmlrpc.php');
+    } catch (Exception $e) {
+        dcCore::app()->error->add($e->getMessage());
+    }
+}
 
 dcCore::app()->setVersion('tweakurls', $this_version);
 

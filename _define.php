@@ -15,17 +15,20 @@ if (!defined('DC_RC_PATH')) {
 }
 
 $this->registerModule(
-    'tweakURLs',             // Name
-    'Tweaks you posts URLs', // Description
-    'xave',                  // Author
-    '1.2.1',
+    'tweakURLs',
+    'Tweaks you posts URLs',
+    'xave',
+    '2.0',
     [
-        'requires'    => [['core', '2.24']],                         // Dependencies
-        'permissions' => 'usage,admin',                              // Permissions
-        'type'        => 'plugin',                                   // Type
+        'requires'    => [['core', '2.24']],
+        'permissions' => dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_USAGE,
+            dcAuth::PERMISSION_ADMIN,
+        ]),
+        'type' => 'plugin',
 
-        'details'    => 'https://open-time.net/?q=tweakurls',       // Details URL
-        'support'    => 'https://github.com/franck-paul/tweakurls', // Support URL
+        'details'    => 'https://open-time.net/?q=tweakurls',
+        'support'    => 'https://github.com/franck-paul/tweakurls',
         'repository' => 'https://raw.githubusercontent.com/franck-paul/tweakurls/master/dcstore.xml',
     ]
 );

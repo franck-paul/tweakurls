@@ -14,4 +14,4 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-$__autoload['tweakUrls'] = __DIR__ . '/inc/lib.tweakurls.php';
+Clearbricks::lib()->autoload(['tweakUrls' => __DIR__ . '/inc/lib.tweakurls.php']);
