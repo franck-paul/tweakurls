@@ -183,15 +183,17 @@ class tweakurlsAdminBehaviours
     }
 }
 
-dcCore::app()->addBehavior('adminBlogPreferencesFormV2', [tweakurlsAdminBehaviours::class, 'adminBlogPreferencesForm']);
-dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', [tweakurlsAdminBehaviours::class, 'adminBeforeBlogSettingsUpdate']);
+dcCore::app()->addBehaviors([
+    'adminBlogPreferencesFormV2'    => [tweakurlsAdminBehaviours::class, 'adminBlogPreferencesForm'],
+    'adminBeforeBlogSettingsUpdate' => [tweakurlsAdminBehaviours::class, 'adminBeforeBlogSettingsUpdate'],
 
-dcCore::app()->addBehavior('adminAfterPostCreate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterPageUpdate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterPageCreate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterPostUpdate', [tweakurlsAdminBehaviours::class, 'adminAfterPostSave']);
-dcCore::app()->addBehavior('adminAfterCategoryCreate', [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave']);
-dcCore::app()->addBehavior('adminAfterCategoryUpdate', [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave']);
+    'adminAfterPostCreate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterPageUpdate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterPageCreate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterPostUpdate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterCategoryCreate'      => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
+    'adminAfterCategoryUpdate'      => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
 
-dcCore::app()->addBehavior('adminPostsActions', [tweakurlsAdminBehaviours::class, 'adminPostsActions']);
-dcCore::app()->addBehavior('adminPagesActions', [tweakurlsAdminBehaviours::class, 'adminPagesActions']);
+    'adminPostsActions'             => [tweakurlsAdminBehaviours::class, 'adminPostsActions'],
+    'adminPagesActions'             => [tweakurlsAdminBehaviours::class, 'adminPagesActions'],
+]);

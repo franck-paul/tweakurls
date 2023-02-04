@@ -19,8 +19,6 @@ class tweakUrls extends text
 
     public static function tweakurlsSettings()
     {
-        dcCore::app()->blog->settings->addNamespace('tweakurls');
-
         return dcCore::app()->blog->settings->tweakurls;
     }
 
