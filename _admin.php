@@ -10,6 +10,9 @@
  * @copyright xave
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+
+use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
+
 class tweakurlsAdminBehaviours
 {
     public static function tweakurls_combo()
@@ -88,7 +91,7 @@ class tweakurlsAdminBehaviours
         }
     }
 
-    public static function adminPagesActions(dcPagesActions $ap)
+    public static function adminPagesActions(PagesBackendActions $ap)
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
@@ -106,7 +109,7 @@ class tweakurlsAdminBehaviours
         self::adminEntriesDoReplacements($ap, $post, 'post');
     }
 
-    public static function adminPagesDoReplacements(dcPagesActions $ap, arrayObject $post)
+    public static function adminPagesDoReplacements(PagesBackendActions $ap, arrayObject $post)
     {
         self::adminEntriesDoReplacements($ap, $post, 'page');
     }
@@ -187,13 +190,13 @@ dcCore::app()->addBehaviors([
     'adminBlogPreferencesFormV2'    => [tweakurlsAdminBehaviours::class, 'adminBlogPreferencesForm'],
     'adminBeforeBlogSettingsUpdate' => [tweakurlsAdminBehaviours::class, 'adminBeforeBlogSettingsUpdate'],
 
-    'adminAfterPostCreate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterPageUpdate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterPageCreate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterPostUpdate'          => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterCategoryCreate'      => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
-    'adminAfterCategoryUpdate'      => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
+    'adminAfterPostCreate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterPageUpdate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterPageCreate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterPostUpdate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
+    'adminAfterCategoryCreate' => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
+    'adminAfterCategoryUpdate' => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
 
-    'adminPostsActions'             => [tweakurlsAdminBehaviours::class, 'adminPostsActions'],
-    'adminPagesActions'             => [tweakurlsAdminBehaviours::class, 'adminPagesActions'],
+    'adminPostsActions' => [tweakurlsAdminBehaviours::class, 'adminPostsActions'],
+    'adminPagesActions' => [tweakurlsAdminBehaviours::class, 'adminPagesActions'],
 ]);
