@@ -10,29 +10,52 @@
  * @copyright xave
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\tweakurls;
+
+use ArrayObject;
+use cursor;
+use dcAuth;
+use dcBlog;
+use dcCategories;
+use dcCore;
+use dcPage;
+use dcPostsActions;
+use form;
+use html;
 
 use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
 
-class tweakurlsAdminBehaviours
+class BackendBehaviors
 {
-    public static function tweakurls_combo()
+    /**
+     * Compose list (combobox) of tweak URLs modes
+     *
+     * @return     array
+     */
+    private static function tweakurls_combo(): array
     {
         return [
-            __('default mode')         => 'default',
-            __('clean all diacritics') => 'nodiacritic',
+            __('Default mode')         => 'default',
+            __('Clean all diacritics') => 'nodiacritic',
             __('Lowercase')            => 'lowercase',
             __('Much more tidy')       => 'mtidy',
         ];
     }
 
+    /**
+     * Display plugin settings (in blog parameters form)
+     */
     public static function adminBlogPreferencesForm()
     {
-        $tweekurls_settings = tweakUrls::tweakurlsSettings();
+        $tweekurls_settings = Helper::tweakurlsSettings();
 
-        # URL modes
+        // URL modes
         $tweakurls_combo = self::tweakurls_combo();
+
         echo
-        '<div class="fieldset"><h4>Tweak URLs</h4>' .
+        '<div class="fieldset" id="tweakurls"><h4>Tweak URLs</h4>' .
         '<p><label for="tweakurls_posturltransform">' .
         __('Posts URL type:') . ' ' .
         form::combo('tweakurls_posturltransform', $tweakurls_combo, $tweekurls_settings->tweakurls_posturltransform) .
@@ -40,34 +63,49 @@ class tweakurlsAdminBehaviours
         '<p><label for="tweakurls_caturltransform">' .
         __('Categories URL type:') . ' ' .
         form::combo('tweakurls_caturltransform', $tweakurls_combo, $tweekurls_settings->tweakurls_caturltransform) .
-            '</label></p>' .
-            '</div>';
+        '</label></p>' .
+        '</div>';
     }
+
+    /**
+     * Store plugin settings (from blog parameters form)
+     */
     public static function adminBeforeBlogSettingsUpdate()
     {
-        $tweekurls_settings = tweakUrls::tweakurlsSettings();
+        $tweekurls_settings = Helper::tweakurlsSettings();
         $tweekurls_settings->put('tweakurls_posturltransform', $_POST['tweakurls_posturltransform']);
         $tweekurls_settings->put('tweakurls_caturltransform', $_POST['tweakurls_caturltransform']);
     }
 
-    public static function adminAfterPostSave($cur, $id = null)
+    /**
+     * Cope URLs tweak on entry save
+     *
+     * @param      dcBlog  $blog   The blog
+     * @param      cursor  $cur    The cursor
+     */
+    public static function coreBeforePost(dcBlog $blog, cursor $cur)
     {
-        if (isset($_POST['post_url']) || empty($_REQUEST['id'])) {
-            $cur->post_url = tweakUrls::tweakBlogURL($cur->post_url);
-            dcCore::app()->blog->updPost($id, $cur);
+        if ($cur->post_url) {
+            $cur->post_url = Helper::tweakBlogURL($cur->post_url);
         }
     }
 
-    public static function adminAfterCategorySave($cur, $id)
+    /**
+     * Cope URLs tweak on category save
+     *
+     * @param      cursor  $cur    The cursor
+     * @param      int     $id     The category identifier
+     */
+    public static function adminAfterCategorySave(cursor $cur, int $id)
     {
-        $tweekurls_settings = tweakUrls::tweakurlsSettings();
+        $tweekurls_settings = Helper::tweakurlsSettings();
         $caturltransform    = $tweekurls_settings->tweakurls_caturltransform;
 
         if (isset($_POST['cat_url']) || empty($_REQUEST['id'])) {
             // if it is a sub-category, change only last part of its url
             $urls    = explode('/', $cur->cat_url);
             $cat_url = array_pop($urls);
-            $urls[]  = tweakUrls::tweakBlogURL($cat_url, $caturltransform);
+            $urls[]  = Helper::tweakBlogURL($cat_url, $caturltransform);
             $urls    = implode('/', $urls);
 
             $new_cur          = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcCategories::CATEGORY_TABLE_NAME);
@@ -78,6 +116,11 @@ class tweakurlsAdminBehaviours
         }
     }
 
+    /**
+     * Add posts action
+     *
+     * @param      dcPostsActions  $ap
+     */
     public static function adminPostsActions(dcPostsActions $ap)
     {
         // Add menuitem in actions dropdown list
@@ -86,11 +129,16 @@ class tweakurlsAdminBehaviours
         ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
-                ['tweakurlsAdminBehaviours', 'adminPostsDoReplacements']
+                [self::class, 'adminPostsDoReplacements']
             );
         }
     }
 
+    /**
+     * Add pages action
+     *
+     * @param      PagesBackendActions  $ap     { parameter_description }
+     */
     public static function adminPagesActions(PagesBackendActions $ap)
     {
         // Add menuitem in actions dropdown list
@@ -99,22 +147,41 @@ class tweakurlsAdminBehaviours
         ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
-                ['tweakurlsAdminBehaviours', 'adminPagesDoReplacements']
+                [self::class, 'adminPagesDoReplacements']
             );
         }
     }
 
+    /**
+     * Cope with posts action
+     *
+     * @param      dcPostsActions  $ap
+     * @param      arrayObject     $post   Form POST
+     */
     public static function adminPostsDoReplacements(dcPostsActions $ap, arrayObject $post)
     {
         self::adminEntriesDoReplacements($ap, $post, 'post');
     }
 
+    /**
+     * Cope with pages actions
+     *
+     * @param      PagesBackendActions  $ap
+     * @param      arrayObject          $post   Form POST
+     */
     public static function adminPagesDoReplacements(PagesBackendActions $ap, arrayObject $post)
     {
         self::adminEntriesDoReplacements($ap, $post, 'page');
     }
 
-    public static function adminEntriesDoReplacements($ap, arrayObject $post, $type = 'post')
+    /**
+     * Cope with posts/pages action
+     *
+     * @param      dcPostsActions|PagesBackendActions       $ap
+     * @param      arrayObject                              $post   The form POST
+     * @param      string                                   $type   The entries type
+     */
+    private static function adminEntriesDoReplacements($ap, arrayObject $post, $type = 'post')
     {
         if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_ADMIN,
@@ -126,7 +193,7 @@ class tweakurlsAdminBehaviours
                     $cur           = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcBlog::POST_TABLE_NAME);
                     $cur->post_url = $posts->post_url;
 
-                    $cur->post_url = tweakUrls::tweakBlogURL($cur->post_url);
+                    $cur->post_url = Helper::tweakBlogURL($cur->post_url);
 
                     if ($cur->post_url != $posts->post_url) {
                         $cur->update('WHERE post_id = ' . (int) $posts->post_id);
@@ -143,7 +210,7 @@ class tweakurlsAdminBehaviours
                     dcPage::breadcrumb(
                         [
                             html::escapeHTML(dcCore::app()->blog->name) => '',
-                            __('Pages')                                 => 'plugin.php?p=pages',
+                            __('Pages')                                 => dcCore::app()->adminurl->get('admin.plugin.pages'),
                             __('Clean URLs')                            => '',
                         ]
                     )
@@ -153,7 +220,7 @@ class tweakurlsAdminBehaviours
                     dcPage::breadcrumb(
                         [
                             html::escapeHTML(dcCore::app()->blog->name) => '',
-                            __('Entries')                               => 'posts.php',
+                            __('Entries')                               => dcCore::app()->adminurl->get('admin.post'),
                             __('Clean URLs')                            => '',
                         ]
                     )
@@ -174,29 +241,14 @@ class tweakurlsAdminBehaviours
 
             $ap->getCheckboxes() .
 
-            '<p><input type="submit" value="' . __('save') . '" /></p>' .
+            '<p><input type="submit" value="' . __('Save') . '" /></p>' .
 
             dcCore::app()->formNonce() . $ap->getHiddenFields() .
             form::hidden(['confirmcleanurls'], 'true') .
             form::hidden(['action'], 'cleanurls') .
-                '</form>';
+            '</form>';
 
             $ap->endPage();
         }
     }
 }
-
-dcCore::app()->addBehaviors([
-    'adminBlogPreferencesFormV2'    => [tweakurlsAdminBehaviours::class, 'adminBlogPreferencesForm'],
-    'adminBeforeBlogSettingsUpdate' => [tweakurlsAdminBehaviours::class, 'adminBeforeBlogSettingsUpdate'],
-
-    'adminAfterPostCreate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterPageUpdate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterPageCreate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterPostUpdate'     => [tweakurlsAdminBehaviours::class, 'adminAfterPostSave'],
-    'adminAfterCategoryCreate' => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
-    'adminAfterCategoryUpdate' => [tweakurlsAdminBehaviours::class, 'adminAfterCategorySave'],
-
-    'adminPostsActions' => [tweakurlsAdminBehaviours::class, 'adminPostsActions'],
-    'adminPagesActions' => [tweakurlsAdminBehaviours::class, 'adminPagesActions'],
-]);

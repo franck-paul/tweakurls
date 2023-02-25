@@ -2,17 +2,22 @@
 /**
  * @brief tweakurls, a plugin for Dotclear 2
  *
- * URL utilities
- *
  * @package Dotclear
  * @subpackage Plugins
  *
- * @author JcDenis
+ * @author xave
  *
  * @copyright xave
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class tweakUrls extends text
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\tweakurls;
+
+use dcCore;
+use text;
+
+class Helper extends text
 {
     /** @ignore */
     protected static $tweakurls_settings = [];

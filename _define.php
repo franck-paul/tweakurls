@@ -14,17 +14,21 @@ $this->registerModule(
     'tweakURLs',
     'Tweaks you posts URLs',
     'xave',
-    '2.0',
+    '3.0',
     [
-        'requires'    => [['core', '2.24']],
+        'requires'    => [['core', '2.25']],
         'permissions' => dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_USAGE,
             dcAuth::PERMISSION_ADMIN,
         ]),
-        'type'        => 'plugin',
+        'type' => 'plugin',
 
-        'details'     => 'https://open-time.net/?q=tweakurls',
-        'support'     => 'https://github.com/franck-paul/tweakurls',
-        'repository'  => 'https://raw.githubusercontent.com/franck-paul/tweakurls/master/dcstore.xml',
+        'settings' => [
+            'blog' => '#params.tweakurls',
+        ],
+
+        'details'    => 'https://open-time.net/?q=tweakurls',
+        'support'    => 'https://github.com/franck-paul/tweakurls',
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/tweakurls/master/dcstore.xml',
     ]
 );

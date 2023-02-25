@@ -3,48 +3,53 @@
 # Date: 2010-09-05 14:11:21
 # Author: xave/dotclear
 # Translated with translater 1.5
-
 msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8\n"
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-25 13:42+0100\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 
-#: _admin.php:35
-msgid "default mode"
-msgstr "mode par défaut"
+msgid "Tweaks you posts URLs"
+msgstr "Nettoyer les URLs de vos entrées"
 
-#: _admin.php:36
-msgid "clean all diacritics"
-msgstr "supprimer tous les caractères diacritiques"
+msgid "tweakURLs"
+msgstr "Nettoyeur d'URLs"
 
-#: _admin.php:37
+msgid "Default mode"
+msgstr "Mode par défaut"
+
+msgid "Clean all diacritics"
+msgstr "Supprimer tous les caractères diacritiques"
+
 msgid "Lowercase"
-msgstr "n'utiliser que des minuscules"
+msgstr "N'utiliser que des minuscules"
 
-#: _admin.php:38
 msgid "Much more tidy"
-msgstr "encore plus propre"
+msgstr "Encore plus propre"
 
-#: _admin.php:52
-#: _admin.php:185
 msgid "Posts URL type:"
 msgstr "Réglage du type d'URL des billets :"
 
-#: _admin.php:56
 msgid "Categories URL type:"
 msgstr "Réglage du type d'URL des catégories :"
 
-#: _admin.php:129
+msgid "Change"
+msgstr "Changer"
+
 msgid "Clean URLs"
 msgstr "Nettoyer les URLs"
 
-#: _admin.php:182
+msgid "Pages"
+msgstr "Pages"
+
+msgid "Entries"
+msgstr "Entrées"
+
 msgid "By changing the URLs, you understand that the old URLs will never be accessible."
 msgstr "En changeant les URLs, vous comprenez que les anciennes URLs ne seront plus jamais accessibles."
 
-#: _admin.php:183
 msgid "Internal links between posts will not work either."
 msgstr "Les liens internes entre les billets ne fonctionneront plus non plus."
 
-#: _admin.php:184
 msgid "The changes are irreversible."
 msgstr "Les changements sont irréversibles."
-
