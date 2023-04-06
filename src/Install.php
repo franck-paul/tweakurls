@@ -16,6 +16,7 @@ namespace Dotclear\Plugin\tweakurls;
 
 use dcCore;
 use dcNsProcess;
+use Exception;
 
 class Install extends dcNsProcess
 {
@@ -24,22 +25,49 @@ class Install extends dcNsProcess
         $module = basename(dirname(__DIR__));
         $check  = dcCore::app()->newVersion($module, dcCore::app()->plugins->moduleInfo($module, 'version'));
 
-        self::$init = defined('DC_CONTEXT_ADMIN') && $check;
+        static::$init = defined('DC_CONTEXT_ADMIN') && $check;
 
-        return self::$init;
+        return static::$init;
     }
 
     public static function process(): bool
     {
-        if (!self::$init) {
+        if (!static::$init) {
             return false;
         }
 
-        $settings = Helper::tweakurlsSettings();
-        $settings->put('tweakurls_posturltransform', '', 'string', 'determines posts URL type.', false, true);
-        $settings->put('tweakurls_caturltransform', '', 'string', 'determines categories URL type.', false, true);
-        $settings->put('tweakurls_mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
-        $settings->put('tweakurls_mtidyremove', "_ ':[]-", 'string', 'Last exotic chars to remove for mtidy mode.', false, true);
+        try {
+            $settings = Helper::tweakurlsSettings();
+
+            $module      = basename(dirname(__DIR__));
+            $old_version = dcCore::app()->getVersion($module);
+
+            if (version_compare((string) $old_version, '4.0', '<')) {
+                // Change settings names (remove tweakurls_ prefix in them)
+                if ($settings->settingExists('tweakurls_posturltransform', true)) {
+                    $settings->rename('tweakurls_posturltransform', 'posturltransform');
+                }
+                if ($settings->settingExists('tweakurls_caturltransform', true)) {
+                    $settings->rename('tweakurls_caturltransform', 'caturltransform');
+                }
+                if ($settings->settingExists('tweakurls_mtidywildcard', true)) {
+                    $settings->rename('tweakurls_mtidywildcard', 'mtidywildcard');
+                }
+                if ($settings->settingExists('tweakurls_mtidyremove', true)) {
+                    $settings->rename('tweakurls_mtidyremove', 'mtidyremove');
+                }
+            }
+
+            // Global settings
+            $settings->put('posturltransform', '', 'string', 'determines posts URL type.', false, true);
+            $settings->put('caturltransform', '', 'string', 'determines categories URL type.', false, true);
+            $settings->put('mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
+            $settings->put('mtidyremove', "_ ':[]-", 'string', 'Last exotic chars to remove for mtidy mode.', false, true);
+
+            return true;
+        } catch (Exception $e) {
+            dcCore::app()->error->add($e->getMessage());
+        }
 
         return true;
     }

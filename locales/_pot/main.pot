@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 tweakurls module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-25 13:42+0100\n"
+"POT-Creation-Date: 2023-04-29 09:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,63 +24,63 @@ msgstr ""
 msgid "tweakURLs"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:34
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:39
 msgid "Default mode"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:35
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:40
 msgid "Clean all diacritics"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:36
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:41
 msgid "Lowercase"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:37
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:42
 msgid "Much more tidy"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:50
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:191
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:59
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:237
 msgid "Posts URL type:"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:54
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:63
 msgid "Categories URL type:"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:108
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:121
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:130
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:148
 msgid "Change"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:108
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:121
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:167
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:177
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:130
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:148
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:213
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:223
 msgid "Clean URLs"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:166
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:212
 msgid "Pages"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:176
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:222
 msgid "Entries"
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:187
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:233
 msgid "By changing the URLs, you understand that the old URLs will never be accessible."
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:188
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:234
 msgid "Internal links between posts will not work either."
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:189
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:235
 msgid "The changes are irreversible."
 msgstr ""
 
-#: ../git-plugins/tweakurls/src/BackendBehaviors.php:197
+#: ../git-plugins/tweakurls/src/BackendBehaviors.php:243
 msgid "Save"
 msgstr ""

@@ -15,14 +15,24 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\tweakurls;
 
 use dcCore;
-use text;
+use dcNamespace;
+use Dotclear\Helper\Text;
 
-class Helper extends text
+class Helper extends Text
 {
-    /** @ignore */
+    /**
+     * Current settings
+     *
+     * @var        array
+     */
     protected static $tweakurls_settings = [];
 
-    public static function tweakurlsSettings()
+    /**
+     * Get registered settings
+     *
+     * @return     dcNamespace
+     */
+    public static function tweakurlsSettings(): dcNamespace
     {
         return dcCore::app()->blog->settings->tweakurls;
     }
@@ -33,9 +43,10 @@ class Helper extends text
      * Transforms a string to a proper URL (keep slashes).
      *
      * @param string    $str            String to transform
+     *
      * @return string
      */
-    public static function nodiacriticURL($str)
+    public static function nodiacriticURL(string $str): string
     {
         return self::str2URL($str);
     }
@@ -46,9 +57,10 @@ class Helper extends text
      * Transforms a string to a proper lowercase URL (keep slashes).
      *
      * @param string    $str            String to transform
+     *
      * @return string
      */
-    public static function lowercaseURL($str)
+    public static function lowercaseURL(string $str): string
     {
         return strtolower(self::nodiacriticURL($str));
     }
@@ -59,12 +71,13 @@ class Helper extends text
      * Returns lowercase alphanumeric string,
      * with last exotic chars $search replaced by $replace.
      *
-     * @param string    $str    String to clean
-     * @param string    $search    Last exotic chars to replace
+     * @param string    $str        String to clean
+     * @param string    $search     Last exotic chars to replace
      * @param string    $replace    Char to use for replacement
+     *
      * @return string
      */
-    public static function neatURL($str, $search = "_ ':[]-", $replace = '-')
+    public static function neatURL(string $str, string $search = "_ ':[]-", string $replace = '-'): string
     {
         $quoted_search  = preg_quote($search);
         $quoted_replace = preg_quote($replace);
@@ -87,13 +100,14 @@ class Helper extends text
      *
      * Returns tweak URL.
      *
-     * @param string    $str    String to clean
-     * @param string    $format    Force predefine format
-     * @param string    $search    Force last exotic chars to replace
+     * @param string    $str        String to clean
+     * @param string    $format     Force predefine format
+     * @param string    $search     Force last exotic chars to replace
      * @param string    $replace    Force char to use for replacement
+     *
      * @return string
      */
-    public static function tweakBlogURL($str, $format = null, $search = null, $replace = null)
+    public static function tweakBlogURL(string $str, ?string $format = null, ?string $search = null, ?string $replace = null): string
     {
         # Read blog settings
         if (empty(self::$tweakurls_settings)) {

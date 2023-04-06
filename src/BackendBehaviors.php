@@ -15,16 +15,22 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\tweakurls;
 
 use ArrayObject;
-use cursor;
-use dcAuth;
 use dcBlog;
 use dcCategories;
 use dcCore;
 use dcPage;
 use dcPostsActions;
-use form;
-use html;
-
+use Dotclear\Database\Cursor;
+use Dotclear\Helper\Html\Form\Fieldset;
+use Dotclear\Helper\Html\Form\Form;
+use Dotclear\Helper\Html\Form\Hidden;
+use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Legend;
+use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Select;
+use Dotclear\Helper\Html\Form\Submit;
+use Dotclear\Helper\Html\Form\Text;
+use Dotclear\Helper\Html\Html;
 use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
 
 class BackendBehaviors
@@ -55,16 +61,23 @@ class BackendBehaviors
         $tweakurls_combo = self::tweakurls_combo();
 
         echo
-        '<div class="fieldset" id="tweakurls"><h4>Tweak URLs</h4>' .
-        '<p><label for="tweakurls_posturltransform">' .
-        __('Posts URL type:') . ' ' .
-        form::combo('tweakurls_posturltransform', $tweakurls_combo, $tweekurls_settings->tweakurls_posturltransform) .
-        '</label></p>' .
-        '<p><label for="tweakurls_caturltransform">' .
-        __('Categories URL type:') . ' ' .
-        form::combo('tweakurls_caturltransform', $tweakurls_combo, $tweekurls_settings->tweakurls_caturltransform) .
-        '</label></p>' .
-        '</div>';
+        (new Fieldset('tweakurls'))
+        ->legend((new Legend(__('Tweak URLs'))))
+        ->fields([
+            (new Para())->items([
+                (new Select('tweakurls_posturltransform'))
+                ->items($tweakurls_combo)
+                ->default($tweekurls_settings->tweakurls_posturltransform)
+                ->label((new Label(__('Posts URL type:'), Label::INSIDE_TEXT_BEFORE))),
+            ]),
+            (new Para())->items([
+                (new Select('tweakurls_caturltransform'))
+                ->items($tweakurls_combo)
+                ->default($tweekurls_settings->tweakurls_caturltransform)
+                ->label((new Label(__('Categories URL type:'), Label::INSIDE_TEXT_BEFORE))),
+            ]),
+        ])
+        ->render();
     }
 
     /**
@@ -73,8 +86,8 @@ class BackendBehaviors
     public static function adminBeforeBlogSettingsUpdate()
     {
         $tweekurls_settings = Helper::tweakurlsSettings();
-        $tweekurls_settings->put('tweakurls_posturltransform', $_POST['tweakurls_posturltransform']);
-        $tweekurls_settings->put('tweakurls_caturltransform', $_POST['tweakurls_caturltransform']);
+        $tweekurls_settings->put('posturltransform', $_POST['tweakurls_posturltransform']);
+        $tweekurls_settings->put('caturltransform', $_POST['tweakurls_caturltransform']);
     }
 
     /**
@@ -83,7 +96,7 @@ class BackendBehaviors
      * @param      dcBlog  $blog   The blog
      * @param      cursor  $cur    The cursor
      */
-    public static function coreBeforePost(dcBlog $blog, cursor $cur)
+    public static function coreBeforePost(dcBlog $blog, Cursor $cur)
     {
         if ($cur->post_url) {
             $cur->post_url = Helper::tweakBlogURL($cur->post_url);
@@ -96,7 +109,7 @@ class BackendBehaviors
      * @param      cursor  $cur    The cursor
      * @param      int     $id     The category identifier
      */
-    public static function adminAfterCategorySave(cursor $cur, int $id)
+    public static function adminAfterCategorySave(Cursor $cur, int $id)
     {
         $tweekurls_settings = Helper::tweakurlsSettings();
         $caturltransform    = $tweekurls_settings->tweakurls_caturltransform;
@@ -112,7 +125,7 @@ class BackendBehaviors
             $new_cur->cat_url = $urls;
             $new_cur->update('WHERE cat_id = ' . $id);
 
-            // todo: check children urls
+            // TODO: check children urls
         }
     }
 
@@ -125,7 +138,7 @@ class BackendBehaviors
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-            dcAuth::PERMISSION_ADMIN,
+            dcCore::app()->auth::PERMISSION_ADMIN,
         ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
@@ -143,7 +156,7 @@ class BackendBehaviors
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-            dcAuth::PERMISSION_ADMIN,
+            dcCore::app()->auth::PERMISSION_ADMIN,
         ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
@@ -184,7 +197,7 @@ class BackendBehaviors
     private static function adminEntriesDoReplacements($ap, arrayObject $post, $type = 'post')
     {
         if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-            dcAuth::PERMISSION_ADMIN,
+            dcCore::app()->auth::PERMISSION_ADMIN,
         ]), dcCore::app()->blog->id) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
             // Do replacements
             $posts = $ap->getRS();
@@ -209,7 +222,7 @@ class BackendBehaviors
                 $ap->beginPage(
                     dcPage::breadcrumb(
                         [
-                            html::escapeHTML(dcCore::app()->blog->name) => '',
+                            Html::escapeHTML(dcCore::app()->blog->name) => '',
                             __('Pages')                                 => dcCore::app()->adminurl->get('admin.plugin.pages'),
                             __('Clean URLs')                            => '',
                         ]
@@ -219,7 +232,7 @@ class BackendBehaviors
                 $ap->beginPage(
                     dcPage::breadcrumb(
                         [
-                            html::escapeHTML(dcCore::app()->blog->name) => '',
+                            Html::escapeHTML(dcCore::app()->blog->name) => '',
                             __('Entries')                               => dcCore::app()->adminurl->get('admin.post'),
                             __('Clean URLs')                            => '',
                         ]
@@ -228,25 +241,30 @@ class BackendBehaviors
             }
 
             echo
-            '<form action="' . $ap->getURI() . '" method="post">' .
-
-            '<p>' .
-            __('By changing the URLs, you understand that the old URLs will never be accessible.') . '<br />' .
-            __('Internal links between posts will not work either.') . '<br />' .
-            __('The changes are irreversible.') . '</p>' .
-
-            '<p><label>' . __('Posts URL type:') . ' ' .
-            form::combo('posturltransform', self::tweakurls_combo(), 'default') .
-            '</label></p>' .
-
-            $ap->getCheckboxes() .
-
-            '<p><input type="submit" value="' . __('Save') . '" /></p>' .
-
-            dcCore::app()->formNonce() . $ap->getHiddenFields() .
-            form::hidden(['confirmcleanurls'], 'true') .
-            form::hidden(['action'], 'cleanurls') .
-            '</form>';
+            (new Form('ap-tweakurl'))
+            ->fields([
+                (new Para())->items([
+                    (new Text())
+                    ->value(__('By changing the URLs, you understand that the old URLs will never be accessible.') . '<br />' .
+                        __('Internal links between posts will not work either.') . '<br />' .
+                        __('The changes are irreversible.')),
+                ]),
+                (new Para())->items([
+                    (new Select('posturltransform'))
+                    ->items(self::tweakurls_combo())
+                    ->default('default')
+                    ->label((new Label(__('Posts URL type:'), Label::INSIDE_TEXT_BEFORE))),
+                ]),
+                (new Text(null, $ap->getCheckboxes())),
+                (new Para())->items([
+                    (new Submit('ap-tweakurl-do', __('Save'))),
+                    dcCore::app()->formNonce(false),
+                    ...$ap->hiddenFields(),
+                    (new Hidden(['confirmcleanurls'], 'true')),
+                    (new Hidden(['action'], 'cleanurls')),
+                ]),
+            ])
+            ->render();
 
             $ap->endPage();
         }
