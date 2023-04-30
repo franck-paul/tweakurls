@@ -26,3 +26,4 @@ L10n::$locales['Entries'] = 'Entrées';
 L10n::$locales['By changing the URLs, you understand that the old URLs will never be accessible.'] = 'En changeant les URLs, vous comprenez que les anciennes URLs ne seront plus jamais accessibles.';
 L10n::$locales['Internal links between posts will not work either.'] = 'Les liens internes entre les billets ne fonctionneront plus non plus.';
 L10n::$locales['The changes are irreversible.'] = 'Les changements sont irréversibles.';
+L10n::$locales['Save'] = 'Enregistrer';

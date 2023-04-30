@@ -30,9 +30,9 @@ class Helper extends Text
     /**
      * Get registered settings
      *
-     * @return     dcNamespace
+     * @return     dcNamespace|null
      */
-    public static function tweakurlsSettings(): dcNamespace
+    public static function tweakurlsSettings(): ?dcNamespace
     {
         return dcCore::app()->blog->settings->tweakurls;
     }
