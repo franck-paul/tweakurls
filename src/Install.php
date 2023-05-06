@@ -42,18 +42,15 @@ class Install extends dcNsProcess
 
             if (version_compare((string) $old_version, '4.0', '<')) {
                 // Change settings names (remove tweakurls_ prefix in them)
-                if ($settings->settingExists('tweakurls_posturltransform', true)) {
-                    $settings->rename('tweakurls_posturltransform', 'posturltransform');
-                }
-                if ($settings->settingExists('tweakurls_caturltransform', true)) {
-                    $settings->rename('tweakurls_caturltransform', 'caturltransform');
-                }
-                if ($settings->settingExists('tweakurls_mtidywildcard', true)) {
-                    $settings->rename('tweakurls_mtidywildcard', 'mtidywildcard');
-                }
-                if ($settings->settingExists('tweakurls_mtidyremove', true)) {
-                    $settings->rename('tweakurls_mtidyremove', 'mtidyremove');
-                }
+                $rename = function (string $name) use ($settings): void {
+                    if ($settings->settingExists('tweakurls_' . $name, true)) {
+                        $settings->rename('tweakurls_' . $name, $name);
+                    }
+                };
+                $rename('posturltransform');
+                $rename('caturltransform');
+                $rename('mtidywildcard');
+                $rename('mtidyremove');
             }
 
             // Global settings
