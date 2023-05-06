@@ -22,8 +22,7 @@ class Install extends dcNsProcess
 {
     public static function init(): bool
     {
-        $module = basename(dirname(__DIR__));
-        $check  = dcCore::app()->newVersion($module, dcCore::app()->plugins->moduleInfo($module, 'version'));
+        $check = dcCore::app()->newVersion(My::id(), dcCore::app()->plugins->moduleInfo(My::id(), 'version'));
 
         static::$init = defined('DC_CONTEXT_ADMIN') && $check;
 
@@ -39,8 +38,7 @@ class Install extends dcNsProcess
         try {
             $settings = Helper::tweakurlsSettings();
 
-            $module      = basename(dirname(__DIR__));
-            $old_version = dcCore::app()->getVersion($module);
+            $old_version = dcCore::app()->getVersion(My::id());
 
             if (version_compare((string) $old_version, '4.0', '<')) {
                 // Change settings names (remove tweakurls_ prefix in them)
