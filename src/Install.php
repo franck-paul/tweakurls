@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\tweakurls;
 
 use dcCore;
+use dcNamespace;
 use dcNsProcess;
 use Exception;
 
@@ -42,15 +43,17 @@ class Install extends dcNsProcess
 
             if (version_compare((string) $old_version, '4.0', '<')) {
                 // Change settings names (remove tweakurls_ prefix in them)
-                $rename = function (string $name) use ($settings): void {
+
+                $rename = function (string $name, dcNamespace $settings): void {
                     if ($settings->settingExists('tweakurls_' . $name, true)) {
                         $settings->rename('tweakurls_' . $name, $name);
                     }
                 };
-                $rename('posturltransform');
-                $rename('caturltransform');
-                $rename('mtidywildcard');
-                $rename('mtidyremove');
+
+                $rename('posturltransform', $settings);
+                $rename('caturltransform', $settings);
+                $rename('mtidywildcard', $settings);
+                $rename('mtidyremove', $settings);
             }
 
             // Global settings
