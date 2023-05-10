@@ -34,7 +34,7 @@ class Helper extends Text
      */
     public static function tweakurlsSettings(): ?dcNamespace
     {
-        return dcCore::app()->blog->settings->tweakurls;
+        return dcCore::app()->blog->settings->get(My::id());
     }
 
     /**

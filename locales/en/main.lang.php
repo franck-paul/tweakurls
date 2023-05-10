@@ -17,6 +17,7 @@ L10n::$locales['Default mode'] = '';
 L10n::$locales['Clean all diacritics'] = '';
 L10n::$locales['Lowercase'] = '';
 L10n::$locales['Much more tidy'] = '';
+L10n::$locales['Tweak URLs'] = '';
 L10n::$locales['Posts URL type:'] = '';
 L10n::$locales['Categories URL type:'] = '';
 L10n::$locales['Change'] = '';

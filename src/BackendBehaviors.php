@@ -55,7 +55,7 @@ class BackendBehaviors
      */
     public static function adminBlogPreferencesForm()
     {
-        $tweekurls_settings = Helper::tweakurlsSettings();
+        $settings = Helper::tweakurlsSettings();
 
         // URL modes
         $tweakurls_combo = self::tweakurls_combo();
@@ -67,13 +67,13 @@ class BackendBehaviors
             (new Para())->items([
                 (new Select('tweakurls_posturltransform'))
                 ->items($tweakurls_combo)
-                ->default($tweekurls_settings->tweakurls_posturltransform)
+                ->default($settings->tweakurls_posturltransform)
                 ->label((new Label(__('Posts URL type:'), Label::INSIDE_TEXT_BEFORE))),
             ]),
             (new Para())->items([
                 (new Select('tweakurls_caturltransform'))
                 ->items($tweakurls_combo)
-                ->default($tweekurls_settings->tweakurls_caturltransform)
+                ->default($settings->tweakurls_caturltransform)
                 ->label((new Label(__('Categories URL type:'), Label::INSIDE_TEXT_BEFORE))),
             ]),
         ])
@@ -85,9 +85,9 @@ class BackendBehaviors
      */
     public static function adminBeforeBlogSettingsUpdate()
     {
-        $tweekurls_settings = Helper::tweakurlsSettings();
-        $tweekurls_settings->put('posturltransform', $_POST['tweakurls_posturltransform']);
-        $tweekurls_settings->put('caturltransform', $_POST['tweakurls_caturltransform']);
+        $settings = Helper::tweakurlsSettings();
+        $settings->put('posturltransform', $_POST['tweakurls_posturltransform']);
+        $settings->put('caturltransform', $_POST['tweakurls_caturltransform']);
     }
 
     /**
@@ -111,8 +111,8 @@ class BackendBehaviors
      */
     public static function adminAfterCategorySave(Cursor $cur, int $id)
     {
-        $tweekurls_settings = Helper::tweakurlsSettings();
-        $caturltransform    = $tweekurls_settings->tweakurls_caturltransform;
+        $settings        = Helper::tweakurlsSettings();
+        $caturltransform = $settings->tweakurls_caturltransform;
 
         if (isset($_POST['cat_url']) || empty($_REQUEST['id'])) {
             // if it is a sub-category, change only last part of its url
