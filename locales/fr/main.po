@@ -1,10 +1,10 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
 # Franck Paul <carnet.franck.paul@gmail.com>, 2023
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,10 +14,10 @@ msgstr ""
 "PO-Revision-Date: 2023-04-29 09:19+0000\n"
 "Last-Translator: Franck Paul <carnet.franck.paul@gmail.com>, 2023\n"
 "Language-Team: French (https://app.transifex.com/open-time/teams/109573/fr/)\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "Tweaks you posts URLs"
@@ -38,7 +38,6 @@ msgstr "N'utiliser que des minuscules"
 msgid "Much more tidy"
 msgstr "Encore plus propre"
 
-#, fuzzy
 msgid "Tweak URLs"
 msgstr "Nettoyeur d'URLs"
 
@@ -60,8 +59,12 @@ msgstr "Pages"
 msgid "Entries"
 msgstr "Entrées"
 
-msgid "By changing the URLs, you understand that the old URLs will never be accessible."
-msgstr "En changeant les URLs, vous comprenez que les anciennes URLs ne seront plus jamais accessibles."
+msgid ""
+"By changing the URLs, you understand that the old URLs will never be "
+"accessible."
+msgstr ""
+"En changeant les URLs, vous comprenez que les anciennes URLs ne seront plus "
+"jamais accessibles."
 
 msgid "Internal links between posts will not work either."
 msgstr "Les liens internes entre les billets ne fonctionneront plus non plus."
