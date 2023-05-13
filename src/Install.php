@@ -61,8 +61,6 @@ class Install extends dcNsProcess
             $settings->put('caturltransform', '', 'string', 'determines categories URL type.', false, true);
             $settings->put('mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
             $settings->put('mtidyremove', "_ ':[]-", 'string', 'Last exotic chars to remove for mtidy mode.', false, true);
-
-            return true;
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
