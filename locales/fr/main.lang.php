@@ -11,7 +11,7 @@
 
 use Dotclear\Helper\L10n;
 
-L10n::$locales['Tweaks you posts URLs'] = 'Nettoyer les URLs de vos entrées';
+L10n::$locales['Tweaks you posts URLs'] = 'Nettoyer les URLs de vos billets';
 L10n::$locales['tweakURLs'] = 'Nettoyeur d\'URLs';
 L10n::$locales['Default mode'] = 'Mode par défaut';
 L10n::$locales['Clean all diacritics'] = 'Supprimer tous les caractères diacritiques';
