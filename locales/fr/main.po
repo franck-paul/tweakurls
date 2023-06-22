@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "Tweaks you posts URLs"
-msgstr "Nettoyer les URLs de vos entrées"
+msgstr "Nettoyer les URLs de vos billets"
 
 msgid "tweakURLs"
 msgstr "Nettoyeur d'URLs"
