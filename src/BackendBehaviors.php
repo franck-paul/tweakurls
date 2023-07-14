@@ -40,7 +40,7 @@ class BackendBehaviors
      *
      * @return     array
      */
-    private static function tweakurls_combo(): array
+    private static function combo(): array
     {
         return [
             __('Default mode')         => 'default',
@@ -58,7 +58,7 @@ class BackendBehaviors
         $settings = Helper::tweakurlsSettings();
 
         // URL modes
-        $tweakurls_combo = self::tweakurls_combo();
+        $combo = self::combo();
 
         echo
         (new Fieldset('tweakurls'))
@@ -66,14 +66,14 @@ class BackendBehaviors
         ->fields([
             (new Para())->items([
                 (new Select('tweakurls_posturltransform'))
-                ->items($tweakurls_combo)
-                ->default($settings->tweakurls_posturltransform)
+                ->items($combo)
+                ->default($settings->posturltransform)
                 ->label((new Label(__('Posts URL type:'), Label::INSIDE_TEXT_BEFORE))),
             ]),
             (new Para())->items([
                 (new Select('tweakurls_caturltransform'))
-                ->items($tweakurls_combo)
-                ->default($settings->tweakurls_caturltransform)
+                ->items($combo)
+                ->default($settings->caturltransform)
                 ->label((new Label(__('Categories URL type:'), Label::INSIDE_TEXT_BEFORE))),
             ]),
         ])
@@ -86,6 +86,7 @@ class BackendBehaviors
     public static function adminBeforeBlogSettingsUpdate()
     {
         $settings = Helper::tweakurlsSettings();
+
         $settings->put('posturltransform', $_POST['tweakurls_posturltransform']);
         $settings->put('caturltransform', $_POST['tweakurls_caturltransform']);
     }
@@ -112,7 +113,7 @@ class BackendBehaviors
     public static function adminAfterCategorySave(Cursor $cur, int $id)
     {
         $settings        = Helper::tweakurlsSettings();
-        $caturltransform = $settings->tweakurls_caturltransform;
+        $caturltransform = $settings->caturltransform;
 
         if (isset($_POST['cat_url']) || empty($_REQUEST['id'])) {
             // if it is a sub-category, change only last part of its url
@@ -251,7 +252,7 @@ class BackendBehaviors
                 ]),
                 (new Para())->items([
                     (new Select('posturltransform'))
-                    ->items(self::tweakurls_combo())
+                    ->items(self::combo())
                     ->default('default')
                     ->label((new Label(__('Posts URL type:'), Label::INSIDE_TEXT_BEFORE))),
                 ]),

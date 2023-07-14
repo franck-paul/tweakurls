@@ -25,7 +25,7 @@ class Helper extends Text
      *
      * @var        array
      */
-    protected static $tweakurls_settings = [];
+    protected static $settings = [];
 
     /**
      * Get registered settings
@@ -110,41 +110,41 @@ class Helper extends Text
     public static function tweakBlogURL(string $str, ?string $format = null, ?string $search = null, ?string $replace = null): string
     {
         # Read blog settings
-        if (empty(self::$tweakurls_settings)) {
+        if (empty(self::$settings)) {
             $s = self::tweakurlsSettings();
 
-            $s_format = (string) $s->tweakurls_posturltransform;
+            $s_format = (string) $s->posturltransform;
             if (empty($s_format)) {
                 $s_format = 'default';
             }
 
-            $s_search = (string) $s->tweakurls_mtidyremove;
+            $s_search = (string) $s->mtidyremove;
             if (empty($s_search)) {
                 $s_search = "_ ':[]-";
             }
 
-            $s_replace = (string) $s->tweakurls_mtidywildcard;
+            $s_replace = (string) $s->mtidywildcard;
             if (empty($s_replace)) {
                 $s_replace = '-';
             }
 
-            self::$tweakurls_settings = [
+            self::$settings = [
                 'format'  => $s_format,
                 'search'  => $s_search,
                 'replace' => $s_replace,
             ];
         }
-        $tweakurls_settings = self::$tweakurls_settings;
+        $settings = self::$settings;
 
         # Read class settings
         if (!$format) {
-            $format = $tweakurls_settings['format'];
+            $format = $settings['format'];
         }
         if (!$search) {
-            $search = $tweakurls_settings['search'];
+            $search = $settings['search'];
         }
         if (!$replace) {
-            $replace = $tweakurls_settings['replace'];
+            $replace = $settings['replace'];
         }
 
         # Clean URL
