@@ -60,6 +60,8 @@ class BackendBehaviors
         // URL modes
         $combo = self::combo();
 
+        $sample = '2023/08/13/Twenty-Ye@rs-old_=O=_!';
+
         echo
         (new Fieldset('tweakurls'))
         ->legend((new Legend(__('Tweak URLs'))))
@@ -75,6 +77,38 @@ class BackendBehaviors
                 ->items($combo)
                 ->default($settings->caturltransform)
                 ->label((new Label(__('Categories URL type:'), Label::INSIDE_TEXT_BEFORE))),
+            ]),
+            (new Para())->items([
+                (new Text(null, '<hr />')),
+                (new Para(null, 'table'))->items([
+                    (new Para(null, 'caption'))->items([
+                        (new Text(null, __('Examples with following URL:') . ' <code>' . $sample . '</code>')),
+                    ]),
+                    (new Para(null, 'thead'))->items([
+                        (new Para(null, 'tr'))->items([
+                            (new Text('th', __('Mode'))),
+                            (new Text('th', __('Result'))),
+                        ]),
+                    ]),
+                    (new Para(null, 'tbody'))->items([
+                        (new Para(null, 'tr'))->items([
+                            (new Text('td', __('Default mode'))),
+                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'default') . '</code>')),
+                        ]),
+                        (new Para(null, 'tr'))->items([
+                            (new Text('td', __('Clean all diacritics'))),
+                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'nodiacritic') . '</code>')),
+                        ]),
+                        (new Para(null, 'tr'))->items([
+                            (new Text('td', __('Lowercase'))),
+                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'lowercase') . '</code>')),
+                        ]),
+                        (new Para(null, 'tr'))->items([
+                            (new Text('td', __('Much more tidy'))),
+                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'mtidy') . '</code>')),
+                        ]),
+                    ]),
+                ]),
             ]),
         ])
         ->render();
