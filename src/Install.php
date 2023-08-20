@@ -16,24 +16,19 @@ namespace Dotclear\Plugin\tweakurls;
 
 use dcCore;
 use dcNamespace;
-use dcNsProcess;
+use Dotclear\Core\Process;
 use Exception;
 
-class Install extends dcNsProcess
+class Install extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        $check = My::checkContext(My::INSTALL);
-
-        static::$init = defined('DC_CONTEXT_ADMIN') && $check;
-
-        return static::$init;
+        return self::status(My::checkContext(My::INSTALL));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 

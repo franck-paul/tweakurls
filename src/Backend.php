@@ -15,39 +15,36 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\tweakurls;
 
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 
-class Backend extends dcNsProcess
+class Backend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::BACKEND);
-
         // dead but useful code, in order to have translations
         __('tweakURLs') . __('Tweaks you posts URLs');
 
-        return static::$init;
+        return self::status(My::checkContext(My::BACKEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
         dcCore::app()->addBehaviors([
-            'adminBlogPreferencesFormV2'    => [BackendBehaviors::class, 'adminBlogPreferencesForm'],
-            'adminBeforeBlogSettingsUpdate' => [BackendBehaviors::class, 'adminBeforeBlogSettingsUpdate'],
+            'adminBlogPreferencesFormV2'    => BackendBehaviors::adminBlogPreferencesForm(...),
+            'adminBeforeBlogSettingsUpdate' => BackendBehaviors::adminBeforeBlogSettingsUpdate(...),
 
-            'coreBeforePostCreate' => [BackendBehaviors::class, 'coreBeforePost'],
-            'coreBeforePostUpdate' => [BackendBehaviors::class, 'coreBeforePost'],
+            'coreBeforePostCreate' => BackendBehaviors::coreBeforePost(...),
+            'coreBeforePostUpdate' => BackendBehaviors::coreBeforePost(...),
 
-            'adminAfterCategoryCreate' => [BackendBehaviors::class, 'adminAfterCategorySave'],
-            'adminAfterCategoryUpdate' => [BackendBehaviors::class, 'adminAfterCategorySave'],
+            'adminAfterCategoryCreate' => BackendBehaviors::adminAfterCategorySave(...),
+            'adminAfterCategoryUpdate' => BackendBehaviors::adminAfterCategorySave(...),
 
-            'adminPostsActions' => [BackendBehaviors::class, 'adminPostsActions'],
-            'adminPagesActions' => [BackendBehaviors::class, 'adminPagesActions'],
+            'adminPostsActions' => BackendBehaviors::adminPostsActions(...),
+            'adminPagesActions' => BackendBehaviors::adminPagesActions(...),
         ]);
 
         return true;

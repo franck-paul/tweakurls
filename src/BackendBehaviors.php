@@ -18,8 +18,8 @@ use ArrayObject;
 use dcBlog;
 use dcCategories;
 use dcCore;
-use dcPage;
-use dcPostsActions;
+use Dotclear\Core\Backend\Action\ActionsPosts;
+use Dotclear\Core\Backend\Page;
 use Dotclear\Database\Cursor;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
@@ -167,9 +167,9 @@ class BackendBehaviors
     /**
      * Add posts action
      *
-     * @param      dcPostsActions  $ap
+     * @param      ActionsPosts  $ap
      */
-    public static function adminPostsActions(dcPostsActions $ap)
+    public static function adminPostsActions(ActionsPosts $ap)
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
@@ -177,7 +177,7 @@ class BackendBehaviors
         ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
-                [self::class, 'adminPostsDoReplacements']
+                self::adminPostsDoReplacements(...)
             );
         }
     }
@@ -195,7 +195,7 @@ class BackendBehaviors
         ]), dcCore::app()->blog->id)) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
-                [self::class, 'adminPagesDoReplacements']
+                self::adminPagesDoReplacements(...)
             );
         }
     }
@@ -203,10 +203,10 @@ class BackendBehaviors
     /**
      * Cope with posts action
      *
-     * @param      dcPostsActions  $ap
+     * @param      ActionsPosts  $ap
      * @param      arrayObject     $post   Form POST
      */
-    public static function adminPostsDoReplacements(dcPostsActions $ap, arrayObject $post)
+    public static function adminPostsDoReplacements(ActionsPosts $ap, arrayObject $post)
     {
         self::adminEntriesDoReplacements($ap, $post, 'post');
     }
@@ -225,7 +225,7 @@ class BackendBehaviors
     /**
      * Cope with posts/pages action
      *
-     * @param      dcPostsActions|PagesBackendActions       $ap
+     * @param      ActionsPosts|PagesBackendActions       $ap
      * @param      arrayObject                              $post   The form POST
      * @param      string                                   $type   The entries type
      */
@@ -255,20 +255,20 @@ class BackendBehaviors
             // Ask confirmation for replacements
             if ($type == 'page') {
                 $ap->beginPage(
-                    dcPage::breadcrumb(
+                    Page::breadcrumb(
                         [
                             Html::escapeHTML(dcCore::app()->blog->name) => '',
-                            __('Pages')                                 => dcCore::app()->adminurl->get('admin.plugin.pages'),
+                            __('Pages')                                 => dcCore::app()->admin->url->get('admin.plugin.pages'),
                             __('Clean URLs')                            => '',
                         ]
                     )
                 );
             } else {
                 $ap->beginPage(
-                    dcPage::breadcrumb(
+                    Page::breadcrumb(
                         [
                             Html::escapeHTML(dcCore::app()->blog->name) => '',
-                            __('Entries')                               => dcCore::app()->adminurl->get('admin.post'),
+                            __('Entries')                               => dcCore::app()->admin->url->get('admin.post'),
                             __('Clean URLs')                            => '',
                         ]
                     )
