@@ -23,7 +23,6 @@ use Dotclear\Core\Backend\Page;
 use Dotclear\Database\Cursor;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
-use Dotclear\Helper\Html\Form\Hidden;
 use Dotclear\Helper\Html\Form\Label;
 use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Para;
@@ -293,10 +292,11 @@ class BackendBehaviors
                 (new Text(null, $ap->getCheckboxes())),
                 (new Para())->items([
                     (new Submit('ap-tweakurl-do', __('Save'))),
-                    dcCore::app()->formNonce(false),
                     ...$ap->hiddenFields(),
-                    (new Hidden(['confirmcleanurls'], 'true')),
-                    (new Hidden(['action'], 'cleanurls')),
+                    ... My::hiddenFields([
+                        'confirmcleanurls' => 'true',
+                        'action'           => 'cleanurls',
+                    ]),
                 ]),
             ])
             ->render();

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\tweakurls;
 
-use dcCore;
 use dcNamespace;
 use Dotclear\Helper\Text;
 
@@ -34,7 +33,7 @@ class Helper extends Text
      */
     public static function tweakurlsSettings(): ?dcNamespace
     {
-        return dcCore::app()->blog->settings->get(My::id());
+        return My::settings();
     }
 
     /**
