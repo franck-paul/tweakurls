@@ -23,6 +23,7 @@ use Dotclear\Core\Backend\Page;
 use Dotclear\Database\Cursor;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
+use Dotclear\Helper\Html\Form\Hidden;
 use Dotclear\Helper\Html\Form\Label;
 use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Para;
@@ -276,6 +277,8 @@ class BackendBehaviors
 
             echo
             (new Form('ap-tweakurl'))
+            ->action($ap->getURI())
+            ->method('post')
             ->fields([
                 (new Para())->items([
                     (new Text())
@@ -293,10 +296,10 @@ class BackendBehaviors
                 (new Para())->items([
                     (new Submit('ap-tweakurl-do', __('Save'))),
                     ...$ap->hiddenFields(),
-                    ... My::hiddenFields([
-                        'confirmcleanurls' => 'true',
-                        'action'           => 'cleanurls',
-                    ]),
+                    (new Hidden(['confirmcleanurls'], 'true')),
+                    (new Hidden(['action'], 'cleanurls')),
+                    (new Hidden(['process'], ($type === 'post' ? 'Posts' : 'Plugin'))),
+                    dcCore::app()->formNonce(false),
                 ]),
             ])
             ->render();

@@ -33,7 +33,7 @@ class Helper extends Text
      */
     public static function tweakurlsSettings(): ?dcNamespace
     {
-        return My::settings();
+        return My::settings();  // @phpstan-ignore-line
     }
 
     /**
