@@ -55,7 +55,7 @@ class BackendBehaviors
      */
     public static function adminBlogPreferencesForm()
     {
-        $settings = Helper::tweakurlsSettings();
+        $settings = My::settings();
 
         // URL modes
         $combo = self::combo();
@@ -119,7 +119,7 @@ class BackendBehaviors
      */
     public static function adminBeforeBlogSettingsUpdate()
     {
-        $settings = Helper::tweakurlsSettings();
+        $settings = My::settings();
 
         $settings->put('posturltransform', $_POST['tweakurls_posturltransform']);
         $settings->put('caturltransform', $_POST['tweakurls_caturltransform']);
@@ -146,7 +146,7 @@ class BackendBehaviors
      */
     public static function adminAfterCategorySave(Cursor $cur, int $id)
     {
-        $settings        = Helper::tweakurlsSettings();
+        $settings        = My::settings();
         $caturltransform = $settings->caturltransform;
 
         if (isset($_POST['cat_url']) || empty($_REQUEST['id'])) {

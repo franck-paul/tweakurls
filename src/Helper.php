@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\tweakurls;
 
-use dcNamespace;
 use Dotclear\Helper\Text;
 
 class Helper extends Text
@@ -25,16 +24,6 @@ class Helper extends Text
      * @var        array
      */
     protected static $settings = [];
-
-    /**
-     * Get registered settings
-     *
-     * @return     dcNamespace|null
-     */
-    public static function tweakurlsSettings(): ?dcNamespace
-    {
-        return My::settings();  // @phpstan-ignore-line
-    }
 
     /**
      * String to URL
@@ -110,7 +99,7 @@ class Helper extends Text
     {
         # Read blog settings
         if (empty(self::$settings)) {
-            $s = self::tweakurlsSettings();
+            $s = My::settings();
 
             $s_format = (string) $s->posturltransform;
             if (empty($s_format)) {

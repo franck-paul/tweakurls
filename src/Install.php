@@ -33,7 +33,7 @@ class Install extends Process
         }
 
         try {
-            $settings = Helper::tweakurlsSettings();
+            $settings = My::settings();
 
             $old_version = dcCore::app()->getVersion(My::id());
 
