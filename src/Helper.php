@@ -21,9 +21,9 @@ class Helper extends Text
     /**
      * Current settings
      *
-     * @var        array
+     * @var        array<string, string>
      */
-    protected static $settings = [];
+    protected static array $settings = [];
 
     /**
      * String to URL

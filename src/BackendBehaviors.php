@@ -38,7 +38,7 @@ class BackendBehaviors
     /**
      * Compose list (combobox) of tweak URLs modes
      *
-     * @return     array
+     * @return     array<string, string>
      */
     private static function combo(): array
     {
@@ -53,7 +53,7 @@ class BackendBehaviors
     /**
      * Display plugin settings (in blog parameters form)
      */
-    public static function adminBlogPreferencesForm()
+    public static function adminBlogPreferencesForm(): string
     {
         $settings = My::settings();
 
@@ -112,17 +112,21 @@ class BackendBehaviors
             ]),
         ])
         ->render();
+
+        return '';
     }
 
     /**
      * Store plugin settings (from blog parameters form)
      */
-    public static function adminBeforeBlogSettingsUpdate()
+    public static function adminBeforeBlogSettingsUpdate(): string
     {
         $settings = My::settings();
 
         $settings->put('posturltransform', $_POST['tweakurls_posturltransform']);
         $settings->put('caturltransform', $_POST['tweakurls_caturltransform']);
+
+        return '';
     }
 
     /**
@@ -131,11 +135,13 @@ class BackendBehaviors
      * @param      dcBlog  $blog   The blog
      * @param      cursor  $cur    The cursor
      */
-    public static function coreBeforePost(dcBlog $blog, Cursor $cur)
+    public static function coreBeforePost(dcBlog $blog, Cursor $cur): string
     {
         if ($cur->post_url) {
             $cur->post_url = Helper::tweakBlogURL($cur->post_url);
         }
+
+        return '';
     }
 
     /**
@@ -144,7 +150,7 @@ class BackendBehaviors
      * @param      cursor  $cur    The cursor
      * @param      int     $id     The category identifier
      */
-    public static function adminAfterCategorySave(Cursor $cur, int $id)
+    public static function adminAfterCategorySave(Cursor $cur, int $id): string
     {
         $settings        = My::settings();
         $caturltransform = $settings->caturltransform;
@@ -162,6 +168,8 @@ class BackendBehaviors
 
             // TODO: check children urls
         }
+
+        return '';
     }
 
     /**
@@ -169,7 +177,7 @@ class BackendBehaviors
      *
      * @param      ActionsPosts  $ap
      */
-    public static function adminPostsActions(ActionsPosts $ap)
+    public static function adminPostsActions(ActionsPosts $ap): string
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
@@ -180,6 +188,8 @@ class BackendBehaviors
                 self::adminPostsDoReplacements(...)
             );
         }
+
+        return '';
     }
 
     /**
@@ -187,7 +197,7 @@ class BackendBehaviors
      *
      * @param      PagesBackendActions  $ap     { parameter_description }
      */
-    public static function adminPagesActions(PagesBackendActions $ap)
+    public static function adminPagesActions(PagesBackendActions $ap): string
     {
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
@@ -198,15 +208,17 @@ class BackendBehaviors
                 self::adminPagesDoReplacements(...)
             );
         }
+
+        return '';
     }
 
     /**
      * Cope with posts action
      *
-     * @param      ActionsPosts  $ap
-     * @param      arrayObject     $post   Form POST
+     * @param      ActionsPosts                 $ap
+     * @param      ArrayObject<string, mixed>   $post   Form POST
      */
-    public static function adminPostsDoReplacements(ActionsPosts $ap, arrayObject $post)
+    public static function adminPostsDoReplacements(ActionsPosts $ap, arrayObject $post): void
     {
         self::adminEntriesDoReplacements($ap, $post, 'post');
     }
@@ -214,10 +226,10 @@ class BackendBehaviors
     /**
      * Cope with pages actions
      *
-     * @param      PagesBackendActions  $ap
-     * @param      arrayObject          $post   Form POST
+     * @param      PagesBackendActions          $ap
+     * @param      ArrayObject<string, mixed>   $post   Form POST
      */
-    public static function adminPagesDoReplacements(PagesBackendActions $ap, arrayObject $post)
+    public static function adminPagesDoReplacements(PagesBackendActions $ap, arrayObject $post): void
     {
         self::adminEntriesDoReplacements($ap, $post, 'page');
     }
@@ -225,11 +237,11 @@ class BackendBehaviors
     /**
      * Cope with posts/pages action
      *
-     * @param      ActionsPosts|PagesBackendActions       $ap
-     * @param      arrayObject                              $post   The form POST
-     * @param      string                                   $type   The entries type
+     * @param      ActionsPosts|PagesBackendActions     $ap
+     * @param      ArrayObject<string, mixed>           $post   The form POST
+     * @param      string                               $type   The entries type
      */
-    private static function adminEntriesDoReplacements($ap, arrayObject $post, $type = 'post')
+    private static function adminEntriesDoReplacements(ActionsPosts|PagesBackendActions $ap, arrayObject $post, string $type = 'post'): void
     {
         if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
             dcCore::app()->auth::PERMISSION_ADMIN,
