@@ -74,13 +74,13 @@ class Helper extends Text
         $str = self::lowercaseURL($str);
 
         // Replace last exotic $search chars by $replace
-        $str = preg_replace('/[' . $quoted_search . ']/', $replace, $str);
+        $str = (string) preg_replace('/[' . $quoted_search . ']/', $replace, $str);
 
         // Remove double $replace
-        $str = preg_replace('/([' . $quoted_replace . ']{2,})/', $replace, $str);
+        $str = (string) preg_replace('/([' . $quoted_replace . ']{2,})/', $replace, $str);
 
         // Remove end $replace
-        return rtrim((string) $str, $replace);
+        return rtrim($str, $replace);
     }
 
     /**

@@ -18,6 +18,7 @@ use ArrayObject;
 use dcBlog;
 use dcCategories;
 use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Backend\Action\ActionsPosts;
 use Dotclear\Core\Backend\Page;
 use Dotclear\Database\Cursor;
@@ -182,7 +183,7 @@ class BackendBehaviors
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
             dcCore::app()->auth::PERMISSION_ADMIN,
-        ]), dcCore::app()->blog->id)) {
+        ]), App::blog()->id())) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
                 self::adminPostsDoReplacements(...)
@@ -202,7 +203,7 @@ class BackendBehaviors
         // Add menuitem in actions dropdown list
         if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
             dcCore::app()->auth::PERMISSION_ADMIN,
-        ]), dcCore::app()->blog->id)) {
+        ]), App::blog()->id())) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
                 self::adminPagesDoReplacements(...)
@@ -245,7 +246,7 @@ class BackendBehaviors
     {
         if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
             dcCore::app()->auth::PERMISSION_ADMIN,
-        ]), dcCore::app()->blog->id) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
+        ]), App::blog()->id()) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
             // Do replacements
             $posts = $ap->getRS();
             if ($posts->rows()) {
@@ -269,9 +270,9 @@ class BackendBehaviors
                 $ap->beginPage(
                     Page::breadcrumb(
                         [
-                            Html::escapeHTML(dcCore::app()->blog->name) => '',
-                            __('Pages')                                 => dcCore::app()->admin->url->get('admin.plugin.pages'),
-                            __('Clean URLs')                            => '',
+                            Html::escapeHTML(App::blog()->name()) => '',
+                            __('Pages')                           => dcCore::app()->adminurl->get('admin.plugin.pages'),
+                            __('Clean URLs')                      => '',
                         ]
                     )
                 );
@@ -279,9 +280,9 @@ class BackendBehaviors
                 $ap->beginPage(
                     Page::breadcrumb(
                         [
-                            Html::escapeHTML(dcCore::app()->blog->name) => '',
-                            __('Entries')                               => dcCore::app()->admin->url->get('admin.post'),
-                            __('Clean URLs')                            => '',
+                            Html::escapeHTML(App::blog()->name()) => '',
+                            __('Entries')                         => dcCore::app()->adminurl->get('admin.post'),
+                            __('Clean URLs')                      => '',
                         ]
                     )
                 );
