@@ -15,12 +15,10 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\tweakurls;
 
 use ArrayObject;
-use dcBlog;
-use dcCategories;
-use dcCore;
 use Dotclear\App;
 use Dotclear\Core\Backend\Action\ActionsPosts;
 use Dotclear\Core\Backend\Page;
+use Dotclear\Core\Categories;
 use Dotclear\Database\Cursor;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
@@ -32,6 +30,7 @@ use Dotclear\Helper\Html\Form\Select;
 use Dotclear\Helper\Html\Form\Submit;
 use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Html;
+use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
 
 class BackendBehaviors
@@ -133,10 +132,10 @@ class BackendBehaviors
     /**
      * Cope URLs tweak on entry save
      *
-     * @param      dcBlog  $blog   The blog
-     * @param      cursor  $cur    The cursor
+     * @param      BlogInterface    $blog   The blog
+     * @param      cursor           $cur    The cursor
      */
-    public static function coreBeforePost(dcBlog $blog, Cursor $cur): string
+    public static function coreBeforePost(BlogInterface $blog, Cursor $cur): string
     {
         if ($cur->post_url) {
             $cur->post_url = Helper::tweakBlogURL($cur->post_url);
@@ -163,7 +162,7 @@ class BackendBehaviors
             $urls[]  = Helper::tweakBlogURL($cat_url, $caturltransform);
             $urls    = implode('/', $urls);
 
-            $new_cur          = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcCategories::CATEGORY_TABLE_NAME);
+            $new_cur          = App::con()->openCursor(App::con()->prefix() . Categories::CATEGORY_TABLE_NAME);
             $new_cur->cat_url = $urls;
             $new_cur->update('WHERE cat_id = ' . $id);
 
@@ -181,8 +180,8 @@ class BackendBehaviors
     public static function adminPostsActions(ActionsPosts $ap): string
     {
         // Add menuitem in actions dropdown list
-        if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-            dcCore::app()->auth::PERMISSION_ADMIN,
+        if (App::auth()->check(App::auth()->makePermissions([
+            App::auth()::PERMISSION_ADMIN,
         ]), App::blog()->id())) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
@@ -201,8 +200,8 @@ class BackendBehaviors
     public static function adminPagesActions(PagesBackendActions $ap): string
     {
         // Add menuitem in actions dropdown list
-        if (dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-            dcCore::app()->auth::PERMISSION_ADMIN,
+        if (App::auth()->check(App::auth()->makePermissions([
+            App::auth()::PERMISSION_ADMIN,
         ]), App::blog()->id())) {
             $ap->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
@@ -244,14 +243,14 @@ class BackendBehaviors
      */
     private static function adminEntriesDoReplacements(ActionsPosts|PagesBackendActions $ap, arrayObject $post, string $type = 'post'): void
     {
-        if (!empty($post['confirmcleanurls']) && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-            dcCore::app()->auth::PERMISSION_ADMIN,
+        if (!empty($post['confirmcleanurls']) && App::auth()->check(App::auth()->makePermissions([
+            App::auth()::PERMISSION_ADMIN,
         ]), App::blog()->id()) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
             // Do replacements
             $posts = $ap->getRS();
             if ($posts->rows()) {
                 while ($posts->fetch()) {
-                    $cur           = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcBlog::POST_TABLE_NAME);
+                    $cur           = App::con()->openCursor(App::con()->prefix() . BlogInterface::POST_TABLE_NAME);
                     $cur->post_url = $posts->post_url;
 
                     $cur->post_url = Helper::tweakBlogURL($cur->post_url);
@@ -271,7 +270,7 @@ class BackendBehaviors
                     Page::breadcrumb(
                         [
                             Html::escapeHTML(App::blog()->name()) => '',
-                            __('Pages')                           => dcCore::app()->adminurl->get('admin.plugin.pages'),
+                            __('Pages')                           => App::backend()->url()->get('admin.plugin.pages'),
                             __('Clean URLs')                      => '',
                         ]
                     )
@@ -281,7 +280,7 @@ class BackendBehaviors
                     Page::breadcrumb(
                         [
                             Html::escapeHTML(App::blog()->name()) => '',
-                            __('Entries')                         => dcCore::app()->adminurl->get('admin.post'),
+                            __('Entries')                         => App::backend()->url()->get('admin.post'),
                             __('Clean URLs')                      => '',
                         ]
                     )
@@ -312,7 +311,7 @@ class BackendBehaviors
                     (new Hidden(['confirmcleanurls'], 'true')),
                     (new Hidden(['action'], 'cleanurls')),
                     (new Hidden(['process'], ($type === 'post' ? 'Posts' : 'Plugin'))),
-                    dcCore::app()->formNonce(false),
+                    App::nonce()->formNonce(),
                 ]),
             ])
             ->render();

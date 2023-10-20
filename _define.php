@@ -17,11 +17,8 @@ $this->registerModule(
     '5.0.2',
     [
         'requires'    => [['core', '2.28']],
-        'permissions' => dcCore::app()->auth->makePermissions([
-            dcAuth::PERMISSION_USAGE,
-            dcAuth::PERMISSION_ADMIN,
-        ]),
-        'type' => 'plugin',
+        'permissions' => 'My',
+        'type'        => 'plugin',
 
         'settings' => [
             'blog' => '#params.tweakurls',

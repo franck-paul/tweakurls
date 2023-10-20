@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\tweakurls;
 
-use dcCore;
-use dcNamespace;
+use Dotclear\App;
 use Dotclear\Core\Process;
+use Dotclear\Interface\Core\BlogWorkspaceInterface;
 use Exception;
 
 class Install extends Process
@@ -35,12 +35,12 @@ class Install extends Process
         try {
             $settings = My::settings();
 
-            $old_version = dcCore::app()->getVersion(My::id());
+            $old_version = App::version()->getVersion(My::id());
 
             if (version_compare((string) $old_version, '4.0', '<')) {
                 // Change settings names (remove tweakurls_ prefix in them)
 
-                $rename = function (string $name, dcNamespace $settings): void {
+                $rename = function (string $name, BlogWorkspaceInterface $settings): void {
                     if ($settings->settingExists('tweakurls_' . $name, true)) {
                         $settings->rename('tweakurls_' . $name, $name);
                     }
@@ -58,7 +58,7 @@ class Install extends Process
             $settings->put('mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
             $settings->put('mtidyremove', "_ ':[]-", 'string', 'Last exotic chars to remove for mtidy mode.', false, true);
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         return true;
