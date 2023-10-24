@@ -250,7 +250,7 @@ class BackendBehaviors
             $posts = $ap->getRS();
             if ($posts->rows()) {
                 while ($posts->fetch()) {
-                    $cur           = App::con()->openCursor(App::con()->prefix() . BlogInterface::POST_TABLE_NAME);
+                    $cur           = App::con()->openCursor(App::con()->prefix() . App::blog()::POST_TABLE_NAME);
                     $cur->post_url = $posts->post_url;
 
                     $cur->post_url = Helper::tweakBlogURL($cur->post_url);
