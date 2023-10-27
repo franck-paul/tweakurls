@@ -98,21 +98,21 @@ class Helper extends Text
     public static function tweakBlogURL(string $str, ?string $format = null, ?string $search = null, ?string $replace = null): string
     {
         # Read blog settings
-        if (empty(self::$settings)) {
+        if (self::$settings === []) {
             $s = My::settings();
 
             $s_format = (string) $s->posturltransform;
-            if (empty($s_format)) {
+            if ($s_format === '') {
                 $s_format = 'default';
             }
 
             $s_search = (string) $s->mtidyremove;
-            if (empty($s_search)) {
+            if ($s_search === '') {
                 $s_search = "_ ':[]-";
             }
 
             $s_replace = (string) $s->mtidywildcard;
-            if (empty($s_replace)) {
+            if ($s_replace === '') {
                 $s_replace = '-';
             }
 
@@ -122,15 +122,18 @@ class Helper extends Text
                 'replace' => $s_replace,
             ];
         }
+
         $settings = self::$settings;
 
         # Read class settings
         if (!$format) {
             $format = $settings['format'];
         }
+
         if (!$search) {
             $search = $settings['search'];
         }
+
         if (!$replace) {
             $replace = $settings['replace'];
         }

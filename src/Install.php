@@ -40,7 +40,7 @@ class Install extends Process
             if (version_compare((string) $old_version, '4.0', '<')) {
                 // Change settings names (remove tweakurls_ prefix in them)
 
-                $rename = function (string $name, BlogWorkspaceInterface $settings): void {
+                $rename = static function (string $name, BlogWorkspaceInterface $settings) : void {
                     if ($settings->settingExists('tweakurls_' . $name, true)) {
                         $settings->rename('tweakurls_' . $name, $name);
                     }
@@ -57,8 +57,8 @@ class Install extends Process
             $settings->put('caturltransform', '', 'string', 'determines categories URL type.', false, true);
             $settings->put('mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
             $settings->put('mtidyremove', "_ ':[]-", 'string', 'Last exotic chars to remove for mtidy mode.', false, true);
-        } catch (Exception $e) {
-            App::error()->add($e->getMessage());
+        } catch (Exception $exception) {
+            App::error()->add($exception->getMessage());
         }
 
         return true;

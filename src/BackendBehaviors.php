@@ -259,6 +259,7 @@ class BackendBehaviors
                         $cur->update('WHERE post_id = ' . (int) $posts->post_id);
                     }
                 }
+
                 $ap->redirect(true, ['upd' => 1]);
             } else {
                 $ap->redirect();
