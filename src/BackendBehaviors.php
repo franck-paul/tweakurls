@@ -79,7 +79,7 @@ class BackendBehaviors
                 ->label((new Label(__('Categories URL type:'), Label::INSIDE_TEXT_BEFORE))),
             ]),
             (new Para())->items([
-                (new Text(null, '<hr />')),
+                (new Text(null, '<hr>')),
                 (new Para(null, 'table'))->items([
                     (new Para(null, 'caption'))->items([
                         (new Text(null, __('Examples with following URL:') . ' <code>' . $sample . '</code>')),
@@ -295,8 +295,8 @@ class BackendBehaviors
             ->fields([
                 (new Para())->items([
                     (new Text())
-                    ->value(__('By changing the URLs, you understand that the old URLs will never be accessible.') . '<br />' .
-                        __('Internal links between posts will not work either.') . '<br />' .
+                    ->value(__('By changing the URLs, you understand that the old URLs will never be accessible.') . '<br>' .
+                        __('Internal links between posts will not work either.') . '<br>' .
                         __('The changes are irreversible.')),
                 ]),
                 (new Para())->items([
