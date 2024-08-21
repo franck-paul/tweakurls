@@ -37,6 +37,8 @@ class Backend extends Process
             'adminBlogPreferencesFormV2'    => BackendBehaviors::adminBlogPreferencesForm(...),
             'adminBeforeBlogSettingsUpdate' => BackendBehaviors::adminBeforeBlogSettingsUpdate(...),
 
+            'coreGetPostURL' => BackendBehaviors::coreGetPostURL(...),
+
             'coreBeforePostCreate' => BackendBehaviors::coreBeforePost(...),
             'coreBeforePostUpdate' => BackendBehaviors::coreBeforePost(...),
 

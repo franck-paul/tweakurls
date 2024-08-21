@@ -32,6 +32,7 @@ use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
+use stdClass;
 
 class BackendBehaviors
 {
@@ -139,6 +140,20 @@ class BackendBehaviors
     {
         if ($cur->post_url) {
             $cur->post_url = Helper::tweakBlogURL($cur->post_url);
+        }
+
+        return '';
+    }
+
+    /**
+     * Cope URLs tweak on getting post URL
+     *
+     * @param      stdClass           $obj    The object containing URL
+     */
+    public static function coreGetPostURL(stdClass $obj): string
+    {
+        if ($obj->url) {
+            $obj->url = Helper::tweakBlogURL($obj->url);
         }
 
         return '';
