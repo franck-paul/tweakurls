@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief tweakurls, a plugin for Dotclear 2
  *
@@ -139,7 +140,7 @@ class BackendBehaviors
     public static function coreBeforePost(BlogInterface $blog, Cursor $cur): string
     {
         if ($cur->post_url) {
-            $cur->post_url = Helper::tweakBlogURL($cur->post_url);
+            $cur->post_url = Helper::tweakBlogURL((string) $cur->post_url);
         }
 
         return '';
