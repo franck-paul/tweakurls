@@ -14,7 +14,7 @@ $this->registerModule(
     'tweakURLs',
     'Tweaks you posts URLs',
     'xave',
-    '6.3',
+    '6.3.1',
     [
         'requires'    => [['core', '2.32']],
         'permissions' => 'My',
