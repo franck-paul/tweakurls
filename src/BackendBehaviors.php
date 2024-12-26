@@ -190,8 +190,6 @@ class BackendBehaviors
 
     /**
      * Add posts action
-     *
-     * @param      ActionsPosts  $ap
      */
     public static function adminPostsActions(ActionsPosts $ap): string
     {
@@ -210,8 +208,6 @@ class BackendBehaviors
 
     /**
      * Add pages action
-     *
-     * @param      PagesBackendActions  $ap     { parameter_description }
      */
     public static function adminPagesActions(PagesBackendActions $ap): string
     {
@@ -231,7 +227,6 @@ class BackendBehaviors
     /**
      * Cope with posts action
      *
-     * @param      ActionsPosts                 $ap
      * @param      ArrayObject<string, mixed>   $post   Form POST
      */
     public static function adminPostsDoReplacements(ActionsPosts $ap, arrayObject $post): void
@@ -242,7 +237,6 @@ class BackendBehaviors
     /**
      * Cope with pages actions
      *
-     * @param      PagesBackendActions          $ap
      * @param      ArrayObject<string, mixed>   $post   Form POST
      */
     public static function adminPagesDoReplacements(PagesBackendActions $ap, arrayObject $post): void
@@ -253,7 +247,6 @@ class BackendBehaviors
     /**
      * Cope with posts/pages action
      *
-     * @param      ActionsPosts|PagesBackendActions     $ap
      * @param      ArrayObject<string, mixed>           $post   The form POST
      * @param      string                               $type   The entries type
      */
@@ -282,7 +275,7 @@ class BackendBehaviors
             }
         } else {
             // Ask confirmation for replacements
-            if ($type == 'page') {
+            if ($type === 'page') {
                 $ap->beginPage(
                     Page::breadcrumb(
                         [

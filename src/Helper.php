@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief tweakurls, a plugin for Dotclear 2
  *
@@ -31,8 +32,6 @@ class Helper extends Text
      * Transforms a string to a proper URL (keep slashes).
      *
      * @param string    $str            String to transform
-     *
-     * @return string
      */
     public static function nodiacriticURL(string $str): string
     {
@@ -45,8 +44,6 @@ class Helper extends Text
      * Transforms a string to a proper lowercase URL (keep slashes).
      *
      * @param string    $str            String to transform
-     *
-     * @return string
      */
     public static function lowercaseURL(string $str): string
     {
@@ -62,8 +59,6 @@ class Helper extends Text
      * @param string    $str        String to clean
      * @param string    $search     Last exotic chars to replace
      * @param string    $replace    Char to use for replacement
-     *
-     * @return string
      */
     public static function neatURL(string $str, string $search = "_ ':[]-", string $replace = '-'): string
     {
@@ -92,8 +87,6 @@ class Helper extends Text
      * @param string    $format     Force predefine format
      * @param string    $search     Force last exotic chars to replace
      * @param string    $replace    Force char to use for replacement
-     *
-     * @return string
      */
     public static function tweakBlogURL(string $str, ?string $format = null, ?string $search = null, ?string $replace = null): string
     {
