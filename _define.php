@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief tweakurls, a plugin for Dotclear 2
  *
@@ -16,6 +17,7 @@ $this->registerModule(
     'xave',
     '6.3.1',
     [
+        'date'        => '2003-08-13T13:42:00+0100',
         'requires'    => [['core', '2.32']],
         'permissions' => 'My',
         'type'        => 'plugin',
