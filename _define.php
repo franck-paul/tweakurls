@@ -18,7 +18,7 @@ $this->registerModule(
     '6.3.1',
     [
         'date'        => '2003-08-13T13:42:00+0100',
-        'requires'    => [['core', '2.32']],
+        'requires'    => [['core', '2.34']],
         'permissions' => 'My',
         'type'        => 'plugin',
 
@@ -29,5 +29,6 @@ $this->registerModule(
         'details'    => 'https://open-time.net/?q=tweakurls',
         'support'    => 'https://github.com/franck-paul/tweakurls',
         'repository' => 'https://raw.githubusercontent.com/franck-paul/tweakurls/main/dcstore.xml',
+        'license'    => 'gpl2',
     ]
 );

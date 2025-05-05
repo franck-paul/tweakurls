@@ -21,6 +21,7 @@ use Dotclear\Core\Backend\Action\ActionsPosts;
 use Dotclear\Core\Backend\Page;
 use Dotclear\Core\Categories;
 use Dotclear\Database\Cursor;
+use Dotclear\Helper\Html\Form\Caption;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
 use Dotclear\Helper\Html\Form\Hidden;
@@ -29,7 +30,13 @@ use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Select;
 use Dotclear\Helper\Html\Form\Submit;
+use Dotclear\Helper\Html\Form\Table;
+use Dotclear\Helper\Html\Form\Tbody;
+use Dotclear\Helper\Html\Form\Td;
 use Dotclear\Helper\Html\Form\Text;
+use Dotclear\Helper\Html\Form\Th;
+use Dotclear\Helper\Html\Form\Thead;
+use Dotclear\Helper\Html\Form\Tr;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
@@ -82,35 +89,49 @@ class BackendBehaviors
             ]),
             (new Para())->items([
                 (new Text(null, '<hr>')),
-                (new Para(null, 'table'))->items([
-                    (new Para(null, 'caption'))->items([
-                        (new Text(null, __('Examples with following URL:') . ' <code>' . $sample . '</code>')),
-                    ]),
-                    (new Para(null, 'thead'))->items([
-                        (new Para(null, 'tr'))->items([
-                            (new Text('th', __('Mode'))),
-                            (new Text('th', __('Result'))),
-                        ]),
-                    ]),
-                    (new Para(null, 'tbody'))->items([
-                        (new Para(null, 'tr'))->items([
-                            (new Text('td', __('Default mode'))),
-                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'default') . '</code>')),
-                        ]),
-                        (new Para(null, 'tr'))->items([
-                            (new Text('td', __('Clean all diacritics'))),
-                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'nodiacritic') . '</code>')),
-                        ]),
-                        (new Para(null, 'tr'))->items([
-                            (new Text('td', __('Lowercase'))),
-                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'lowercase') . '</code>')),
-                        ]),
-                        (new Para(null, 'tr'))->items([
-                            (new Text('td', __('Much more tidy'))),
-                            (new Text('td', '<code>' . Helper::tweakBlogURL($sample, 'mtidy') . '</code>')),
-                        ]),
-                    ]),
-                ]),
+                (new Table())
+                    ->caption(new Caption(__('Examples with following URL:') . ' <code>' . $sample . '</code>'))
+                    ->thead((new Thead())
+                        ->items([
+                            (new Tr())
+                                ->items([
+                                    (new Th())
+                                        ->text(__('Mode')),
+                                    (new Th())
+                                        ->text(__('Result')),
+                                ]),
+                        ]))
+                    ->tbody((new Tbody())
+                        ->items([
+                            (new Tr())
+                                ->items([
+                                    (new Td())
+                                        ->text(__('Default mode')),
+                                    (new Td())
+                                        ->text('<code>' . Helper::tweakBlogURL($sample, 'default') . '</code>'),
+                                ]),
+                            (new Tr())
+                                ->items([
+                                    (new Td())
+                                        ->text(__('Clean all diacritics')),
+                                    (new Td())
+                                        ->text('<code>' . Helper::tweakBlogURL($sample, 'nodiacritic') . '</code>'),
+                                ]),
+                            (new Tr())
+                                ->items([
+                                    (new Td())
+                                        ->text(__('Lowercase')),
+                                    (new Td())
+                                        ->text('<code>' . Helper::tweakBlogURL($sample, 'lowercase') . '</code>'),
+                                ]),
+                            (new Tr())
+                                ->items([
+                                    (new Td())
+                                        ->text(__('Much more tidy')),
+                                    (new Td())
+                                        ->text('<code>' . Helper::tweakBlogURL($sample, 'mtidy') . '</code>'),
+                                ]),
+                        ])),
             ]),
         ])
         ->render();
