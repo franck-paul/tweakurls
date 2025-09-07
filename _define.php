@@ -15,9 +15,9 @@ $this->registerModule(
     'tweakURLs',
     'Tweaks you posts URLs',
     'xave',
-    '7.0',
+    '8.0',
     [
-        'date'        => '2025-05-05T14:15:19+0200',
+        'date'        => '2025-09-07T15:43:23+0200',
         'requires'    => [['core', '2.36']],
         'permissions' => 'My',
         'type'        => 'plugin',
