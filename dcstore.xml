@@ -1,12 +1,12 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="tweakurls">
     <name>tweakURLs</name>
-    <version>7.0</version>
+    <version>8.0</version>
     <author>xave</author>
     <desc>Tweaks you posts URLs</desc>
-    <date>2025-05-05T14:15:19+0200</date>
-    <file>https://github.com/franck-paul/tweakurls/releases/download/7.0/plugin-tweakurls-7.0.zip</file>
-    <da:dcmin>2.34</da:dcmin>
+    <date>2025-09-07T15:43:23+0200</date>
+    <file>https://github.com/franck-paul/tweakurls/releases/download/8.0/plugin-tweakurls-8.0.zip</file>
+    <da:dcmin>2.36</da:dcmin>
     <da:details>https://open-time.net/?q=tweakurls</da:details>
     <da:support>https://github.com/franck-paul/tweakurls</da:support>
   </module>
