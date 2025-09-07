@@ -199,7 +199,7 @@ class BackendBehaviors
             $urls[]  = Helper::tweakBlogURL($cat_url, $caturltransform);
             $urls    = implode('/', $urls);
 
-            $new_cur          = App::con()->openCursor(App::con()->prefix() . Categories::CATEGORY_TABLE_NAME);
+            $new_cur          = App::db()->con()->openCursor(App::db()->con()->prefix() . Categories::CATEGORY_TABLE_NAME);
             $new_cur->cat_url = $urls;
             $new_cur->update('WHERE cat_id = ' . $id);
 
@@ -280,7 +280,7 @@ class BackendBehaviors
             $posts = $ap->getRS();
             if ($posts->rows()) {
                 while ($posts->fetch()) {
-                    $cur           = App::con()->openCursor(App::con()->prefix() . App::blog()::POST_TABLE_NAME);
+                    $cur           = App::db()->con()->openCursor(App::db()->con()->prefix() . App::blog()::POST_TABLE_NAME);
                     $cur->post_url = $posts->post_url;
 
                     $cur->post_url = Helper::tweakBlogURL($cur->post_url);
