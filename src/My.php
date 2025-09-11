@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief tweakurls, a plugin for Dotclear 2
  *
@@ -25,8 +26,8 @@ class My extends MyPlugin
     protected static function checkCustomContext(int $context): ?bool
     {
         return match ($context) {
-            // Limit bakend to content admin and pages user
-            self::BACKEND, self::MANAGE, self::MENU, self::WIDGETS => App::task()->checkContext('BACKEND')
+            // Limit management to admin only
+            self::MANAGE, self::MENU, self::WIDGETS => App::task()->checkContext('BACKEND')
                 && App::blog()->isDefined()
                 && App::auth()->check(App::auth()->makePermissions([
                     App::auth()::PERMISSION_ADMIN,
