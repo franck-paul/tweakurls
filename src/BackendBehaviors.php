@@ -18,7 +18,6 @@ namespace Dotclear\Plugin\tweakurls;
 use ArrayObject;
 use Dotclear\App;
 use Dotclear\Core\Backend\Action\ActionsPosts;
-use Dotclear\Core\Backend\Page;
 use Dotclear\Core\Categories;
 use Dotclear\Database\Cursor;
 use Dotclear\Helper\Html\Form\Caption;
@@ -298,7 +297,7 @@ class BackendBehaviors
             // Ask confirmation for replacements
             if ($type === 'page') {
                 $ap->beginPage(
-                    Page::breadcrumb(
+                    App::backend()->page()->breadcrumb(
                         [
                             Html::escapeHTML(App::blog()->name()) => '',
                             __('Pages')                           => App::backend()->url()->get('admin.plugin.pages'),
@@ -308,7 +307,7 @@ class BackendBehaviors
                 );
             } else {
                 $ap->beginPage(
-                    Page::breadcrumb(
+                    App::backend()->page()->breadcrumb(
                         [
                             Html::escapeHTML(App::blog()->name()) => '',
                             __('Entries')                         => App::backend()->url()->get('admin.post'),
