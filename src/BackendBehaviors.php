@@ -63,7 +63,9 @@ class BackendBehaviors
      */
     public static function adminBlogPreferencesForm(): string
     {
-        $settings = My::settings();
+        $settings         = My::settings();
+        $posturltransform = is_string($posturltransform = $settings->posturltransform) ? $posturltransform : '';
+        $caturltransform  = is_string($caturltransform = $settings->caturltransform) ? $caturltransform : '';
 
         // URL modes
         $combo = self::combo();
@@ -77,13 +79,13 @@ class BackendBehaviors
             (new Para())->items([
                 (new Select('tweakurls_posturltransform'))
                 ->items($combo)
-                ->default($settings->posturltransform)
+                ->default($posturltransform)
                 ->label((new Label(__('Posts URL type:'), Label::INSIDE_TEXT_BEFORE))),
             ]),
             (new Para())->items([
                 (new Select('tweakurls_caturltransform'))
                 ->items($combo)
-                ->default($settings->caturltransform)
+                ->default($caturltransform)
                 ->label((new Label(__('Categories URL type:'), Label::INSIDE_TEXT_BEFORE))),
             ]),
             (new Para())->items([
@@ -143,10 +145,12 @@ class BackendBehaviors
      */
     public static function adminBeforeBlogSettingsUpdate(): string
     {
-        $settings = My::settings();
+        $posturltransform = is_string($posturltransform = $_POST['tweakurls_posturltransform']) ? $posturltransform : '';
+        $caturltransform  = is_string($caturltransform = $_POST['tweakurls_caturltransform']) ? $caturltransform : '';
 
-        $settings->put('posturltransform', $_POST['tweakurls_posturltransform']);
-        $settings->put('caturltransform', $_POST['tweakurls_caturltransform']);
+        $settings = My::settings();
+        $settings->put('posturltransform', $posturltransform);
+        $settings->put('caturltransform', $caturltransform);
 
         return '';
     }
@@ -159,8 +163,9 @@ class BackendBehaviors
      */
     public static function coreBeforePost(BlogInterface $blog, Cursor $cur): string
     {
-        if ($cur->post_url) {
-            $cur->post_url = Helper::tweakBlogURL((string) $cur->post_url);
+        $post_url = is_string($post_url = $cur->post_url) ? $post_url : '';
+        if ($post_url !== '') {
+            $cur->post_url = Helper::tweakBlogURL($post_url);
         }
 
         return '';
@@ -173,8 +178,9 @@ class BackendBehaviors
      */
     public static function coreGetPostURL(stdClass $obj): string
     {
-        if ($obj->url) {
-            $obj->url = Helper::tweakBlogURL($obj->url);
+        $obj_url = is_string($obj_url = $obj->url) ? $obj_url : '';
+        if ($obj_url !== '') {
+            $obj->url = Helper::tweakBlogURL($obj_url);
         }
 
         return '';
@@ -189,11 +195,12 @@ class BackendBehaviors
     public static function adminAfterCategorySave(Cursor $cur, int $id): string
     {
         $settings        = My::settings();
-        $caturltransform = $settings->caturltransform;
+        $caturltransform = is_string($caturltransform = $settings->caturltransform) ? $caturltransform : '';
 
-        if (isset($_POST['cat_url']) || empty($_REQUEST['id'])) {
+        $cat_url = is_string($cat_url = $_POST['cat_url']) ? $cat_url : '';
+        if ($cat_url !== '' || empty($_REQUEST['id'])) {
             // if it is a sub-category, change only last part of its url
-            $urls    = explode('/', $cur->cat_url);
+            $urls    = explode('/', $cat_url);
             $cat_url = array_pop($urls);
             $urls[]  = Helper::tweakBlogURL($cat_url, $caturltransform);
             $urls    = implode('/', $urls);
@@ -279,13 +286,15 @@ class BackendBehaviors
             $posts = $ap->getRS();
             if ($posts->rows()) {
                 while ($posts->fetch()) {
-                    $cur           = App::db()->con()->openCursor(App::db()->con()->prefix() . App::blog()::POST_TABLE_NAME);
-                    $cur->post_url = $posts->post_url;
+                    $post_url = is_string($post_url = $posts->post_url) ? $post_url : '';
+                    $post_id  = is_numeric($post_id = $posts->post_id) ? (int) $post_id : 0;
+                    if ($post_url !== '' && $post_id !== 0) {
+                        $cur           = App::db()->con()->openCursor(App::db()->con()->prefix() . App::blog()::POST_TABLE_NAME);
+                        $cur->post_url = Helper::tweakBlogURL($post_url);
 
-                    $cur->post_url = Helper::tweakBlogURL($cur->post_url);
-
-                    if ($cur->post_url != $posts->post_url) {
-                        $cur->update('WHERE post_id = ' . (int) $posts->post_id);
+                        if ($cur->post_url !== $post_url) {
+                            $cur->update('WHERE post_id = ' . $post_id);
+                        }
                     }
                 }
 

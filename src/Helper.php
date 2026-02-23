@@ -94,17 +94,17 @@ class Helper extends Text
         if (self::$settings === []) {
             $s = My::settings();
 
-            $s_format = (string) $s->posturltransform;
+            $s_format = is_string($s_format = $s->posturltransform) ? $s_format : '';
             if ($s_format === '') {
                 $s_format = 'default';
             }
 
-            $s_search = (string) $s->mtidyremove;
+            $s_search = is_string($s_search = $s->mtidyremove) ? $s_search : '';
             if ($s_search === '') {
                 $s_search = "_ ':[]-";
             }
 
-            $s_replace = (string) $s->mtidywildcard;
+            $s_replace = is_string($s_replace = $s->mtidywildcard) ? $s_replace : '';
             if ($s_replace === '') {
                 $s_replace = '-';
             }
