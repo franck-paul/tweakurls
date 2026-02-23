@@ -1,11 +1,11 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="tweakurls">
     <name>tweakURLs</name>
-    <version>8.1</version>
+    <version>8.2</version>
     <author>xave</author>
     <desc>Tweaks you posts URLs</desc>
-    <date>2025-09-22T10:23:23+0200</date>
-    <file>https://github.com/franck-paul/tweakurls/releases/download/8.1/plugin-tweakurls-8.1.zip</file>
+    <date>2026-02-23T20:48:13+0100</date>
+    <file>https://github.com/franck-paul/tweakurls/releases/download/8.2/plugin-tweakurls-8.2.zip</file>
     <da:dcmin>2.36</da:dcmin>
     <da:details>https://dotclear.org/plugin/detail/tweakurls</da:details>
     <da:support>https://github.com/franck-paul/tweakurls</da:support>
