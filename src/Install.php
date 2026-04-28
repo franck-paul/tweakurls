@@ -56,10 +56,10 @@ class Install
             }
 
             // Global settings
-            $settings->put('posturltransform', '', 'string', 'determines posts URL type.', false, true);
-            $settings->put('caturltransform', '', 'string', 'determines categories URL type.', false, true);
-            $settings->put('mtidywildcard', '-', 'string', 'Wildcard for mtidy mode.', false, true);
-            $settings->put('mtidyremove', "_ ':[]-", 'string', 'Last exotic chars to remove for mtidy mode.', false, true);
+            $settings->put('posturltransform', '', App::blogWorkspace()::NS_STRING, 'determines posts URL type.', false, true);
+            $settings->put('caturltransform', '', App::blogWorkspace()::NS_STRING, 'determines categories URL type.', false, true);
+            $settings->put('mtidywildcard', '-', App::blogWorkspace()::NS_STRING, 'Wildcard for mtidy mode.', false, true);
+            $settings->put('mtidyremove', "_ ':[]-", App::blogWorkspace()::NS_STRING, 'Last exotic chars to remove for mtidy mode.', false, true);
         } catch (Exception $exception) {
             App::error()->add($exception->getMessage());
         }
