@@ -194,22 +194,30 @@ class BackendBehaviors
      */
     public static function adminAfterCategorySave(Cursor $cur, int $id): string
     {
-        $settings        = My::settings();
-        $caturltransform = is_string($caturltransform = $settings->caturltransform) ? $caturltransform : '';
+        if ($id !== 0) {
+            $settings        = My::settings();
+            $caturltransform = is_string($caturltransform = $settings->caturltransform) ? $caturltransform : '';
 
-        $cat_url = is_string($cat_url = $_POST['cat_url']) ? $cat_url : '';
-        if ($cat_url !== '' || empty($_REQUEST['id'])) {
-            // if it is a sub-category, change only last part of its url
-            $urls    = explode('/', $cat_url);
-            $cat_url = array_pop($urls);
-            $urls[]  = Helper::tweakBlogURL($cat_url, $caturltransform);
-            $urls    = implode('/', $urls);
+            // Get post cat URL if any
+            $cat_url = isset($_POST['cat_url']) && is_string($cat_url = $_POST['cat_url']) ? $cat_url : '';
+            if ($cat_url === '') {
+                // Check if there is an URL in cursor
+                $cat_url = $cur->isField('cat_url') && is_string($cat_url = $cur->getField('cat_url')) ? $cat_url : '';
+            }
 
-            $new_cur          = App::db()->con()->openCursor(App::db()->con()->prefix() . Categories::CATEGORY_TABLE_NAME);
-            $new_cur->cat_url = $urls;
-            $new_cur->update('WHERE cat_id = ' . $id);
+            if ($cat_url !== '') {
+                // if it is a sub-category, change only last part of its url
+                $urls    = explode('/', $cat_url);
+                $cat_url = array_pop($urls);
+                $urls[]  = Helper::tweakBlogURL($cat_url, $caturltransform);
+                $urls    = implode('/', $urls);
 
-            // TODO: check children urls
+                $new_cur          = App::db()->con()->openCursor(App::db()->con()->prefix() . Categories::CATEGORY_TABLE_NAME);
+                $new_cur->cat_url = $urls;
+                $new_cur->update('WHERE cat_id = ' . $id);
+
+                // TODO: check children urls
+            }
         }
 
         return '';
@@ -284,7 +292,7 @@ class BackendBehaviors
         ]), App::blog()->id()) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
             // Do replacements
             $posts = $ap->getRS();
-            if ($posts->rows()) {
+            if ($posts->rows() !== []) {
                 while ($posts->fetch()) {
                     $post_url = is_string($post_url = $posts->post_url) ? $post_url : '';
                     $post_id  = is_numeric($post_id = $posts->post_id) ? (int) $post_id : 0;
