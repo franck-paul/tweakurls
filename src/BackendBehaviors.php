@@ -294,8 +294,8 @@ class BackendBehaviors
             $posts = $ap->getRS();
             if ($posts->rows() !== []) {
                 while ($posts->fetch()) {
-                    $post_url = is_string($post_url = $posts->post_url) ? $post_url : '';
-                    $post_id  = is_numeric($post_id = $posts->post_id) ? (int) $post_id : 0;
+                    $post_url = $posts->strField('post_url');
+                    $post_id  = $posts->intField('post_id');
                     if ($post_url !== '' && $post_id !== 0) {
                         $cur           = App::db()->con()->openCursor(App::db()->con()->prefix() . App::blog()::POST_TABLE_NAME);
                         $cur->post_url = Helper::tweakBlogURL($post_url);
