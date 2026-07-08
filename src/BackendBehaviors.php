@@ -64,8 +64,8 @@ class BackendBehaviors
     public static function adminBlogPreferencesForm(): string
     {
         $settings         = My::settings();
-        $posturltransform = is_string($posturltransform = $settings->posturltransform) ? $posturltransform : '';
-        $caturltransform  = is_string($caturltransform = $settings->caturltransform) ? $caturltransform : '';
+        $posturltransform = $settings->getStr('posturltransform', false);
+        $caturltransform  = $settings->getStr('caturltransform', false);
 
         // URL modes
         $combo = self::combo();
@@ -196,7 +196,7 @@ class BackendBehaviors
     {
         if ($id !== 0) {
             $settings        = My::settings();
-            $caturltransform = is_string($caturltransform = $settings->caturltransform) ? $caturltransform : '';
+            $caturltransform = $settings->getStr('caturltransform');
 
             // Get post cat URL if any
             $cat_url = isset($_POST['cat_url']) && is_string($cat_url = $_POST['cat_url']) ? $cat_url : '';
