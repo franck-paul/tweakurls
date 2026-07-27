@@ -287,9 +287,12 @@ class BackendBehaviors
      */
     private static function adminEntriesDoReplacements(ActionsPosts|PagesBackendActions $ap, ArrayObject $post, string $type = 'post'): void
     {
-        if (!empty($post['confirmcleanurls']) && App::auth()->check(App::auth()->makePermissions([
-            App::auth()::PERMISSION_ADMIN,
-        ]), App::blog()->id()) && !empty($post['posturltransform']) && $post['posturltransform'] != 'default') {
+        if (!empty($post['confirmcleanurls'])
+            && App::auth()->check(App::auth()->makePermissions([
+                App::auth()::PERMISSION_ADMIN,
+            ]), App::blog()->id())
+            && !empty($post['posturltransform'])
+            && $post['posturltransform'] != 'default') {
             // Do replacements
             $posts = $ap->getRS();
             if ($posts->rows() !== []) {
