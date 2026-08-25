@@ -163,9 +163,9 @@ class BackendBehaviors
      */
     public static function coreBeforePost(BlogInterface $blog, Cursor $cur): string
     {
-        $post_url = is_string($post_url = $cur->post_url) ? $post_url : '';
+        $post_url = $cur->strField('post_url');
         if ($post_url !== '') {
-            $cur->post_url = Helper::tweakBlogURL($post_url);
+            $cur->setStrField('post_url', Helper::tweakBlogURL($post_url));
         }
 
         return '';
@@ -212,8 +212,8 @@ class BackendBehaviors
                 $urls[]  = Helper::tweakBlogURL($cat_url, $caturltransform);
                 $urls    = implode('/', $urls);
 
-                $new_cur          = App::db()->con()->openCursor(App::db()->con()->prefix() . Categories::CATEGORY_TABLE_NAME);
-                $new_cur->cat_url = $urls;
+                $new_cur = App::db()->con()->openCursor(App::db()->con()->prefix() . Categories::CATEGORY_TABLE_NAME);
+                $new_cur->setStrField('cat_url', $urls);
                 $new_cur->update('WHERE cat_id = ' . $id);
 
                 // TODO: check children urls
@@ -300,10 +300,10 @@ class BackendBehaviors
                     $post_url = $posts->strField('post_url');
                     $post_id  = $posts->intField('post_id');
                     if ($post_url !== '' && $post_id !== 0) {
-                        $cur           = App::db()->con()->openCursor(App::db()->con()->prefix() . App::blog()::POST_TABLE_NAME);
-                        $cur->post_url = Helper::tweakBlogURL($post_url);
+                        $cur = App::db()->con()->openCursor(App::db()->con()->prefix() . App::blog()::POST_TABLE_NAME);
+                        $cur->setStrField('post_url', Helper::tweakBlogURL($post_url));
 
-                        if ($cur->post_url !== $post_url) {
+                        if ($cur->strField('post_url') !== $post_url) {
                             $cur->update('WHERE post_id = ' . $post_id);
                         }
                     }
