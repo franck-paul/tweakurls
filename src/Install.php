@@ -43,9 +43,9 @@ class Install
             if (version_compare((string) $old_version, '4.0', '<')) {
                 // Change settings names (remove tweakurls_ prefix in them)
 
-                $rename = static function (string $name, BlogWorkspaceInterface $settings): void {
-                    if ($settings->settingExists('tweakurls_' . $name, true)) {
-                        $settings->rename('tweakurls_' . $name, $name);
+                $rename = static function (string $name, BlogWorkspaceInterface $blogWorkspace): void {
+                    if ($blogWorkspace->settingExists('tweakurls_' . $name, true)) {
+                        $blogWorkspace->rename('tweakurls_' . $name, $name);
                     }
                 };
 

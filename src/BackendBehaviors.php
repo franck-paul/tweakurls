@@ -158,14 +158,14 @@ class BackendBehaviors
     /**
      * Cope URLs tweak on entry save
      *
-     * @param      BlogInterface    $blog   The blog
-     * @param      cursor           $cur    The cursor
+     * @param      BlogInterface    $blog       The blog
+     * @param      cursor           $cursor     The cursor
      */
-    public static function coreBeforePost(BlogInterface $blog, Cursor $cur): string
+    public static function coreBeforePost(BlogInterface $blog, Cursor $cursor): string
     {
-        $post_url = $cur->strField('post_url');
+        $post_url = $cursor->strField('post_url');
         if ($post_url !== '') {
-            $cur->setStrField('post_url', Helper::tweakBlogURL($post_url));
+            $cursor->setStrField('post_url', Helper::tweakBlogURL($post_url));
         }
 
         return '';
@@ -189,10 +189,10 @@ class BackendBehaviors
     /**
      * Cope URLs tweak on category save
      *
-     * @param      cursor  $cur    The cursor
-     * @param      int     $id     The category identifier
+     * @param      cursor  $cursor    The cursor
+     * @param      int     $id        The category identifier
      */
-    public static function adminAfterCategorySave(Cursor $cur, int $id): string
+    public static function adminAfterCategorySave(Cursor $cursor, int $id): string
     {
         if ($id !== 0) {
             $settings        = My::settings();
@@ -202,7 +202,7 @@ class BackendBehaviors
             $cat_url = isset($_POST['cat_url']) && is_string($cat_url = $_POST['cat_url']) ? $cat_url : '';
             if ($cat_url === '') {
                 // Check if there is an URL in cursor
-                $cat_url = $cur->isField('cat_url') && is_string($cat_url = $cur->getField('cat_url')) ? $cat_url : '';
+                $cat_url = $cursor->isField('cat_url') && is_string($cat_url = $cursor->getField('cat_url')) ? $cat_url : '';
             }
 
             if ($cat_url !== '') {
@@ -226,13 +226,13 @@ class BackendBehaviors
     /**
      * Add posts action
      */
-    public static function adminPostsActions(ActionsPosts $ap): string
+    public static function adminPostsActions(ActionsPosts $actionsPosts): string
     {
         // Add menuitem in actions dropdown list
         if (App::auth()->check(App::auth()->makePermissions([
             App::auth()::PERMISSION_ADMIN,
         ]), App::blog()->id())) {
-            $ap->addAction(
+            $actionsPosts->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
                 self::adminPostsDoReplacements(...)
             );
@@ -244,13 +244,13 @@ class BackendBehaviors
     /**
      * Add pages action
      */
-    public static function adminPagesActions(PagesBackendActions $ap): string
+    public static function adminPagesActions(PagesBackendActions $pagesBackendActions): string
     {
         // Add menuitem in actions dropdown list
         if (App::auth()->check(App::auth()->makePermissions([
             App::auth()::PERMISSION_ADMIN,
         ]), App::blog()->id())) {
-            $ap->addAction(
+            $pagesBackendActions->addAction(
                 [__('Change') => [__('Clean URLs') => 'cleanurls']],
                 self::adminPagesDoReplacements(...)
             );
@@ -262,39 +262,39 @@ class BackendBehaviors
     /**
      * Cope with posts action
      *
-     * @param      ArrayObject<string, mixed>   $post   Form POST
+     * @param      ArrayObject<string, mixed>   $arrayObject   Form POST
      */
-    public static function adminPostsDoReplacements(ActionsPosts $ap, ArrayObject $post): void
+    public static function adminPostsDoReplacements(ActionsPosts $actionsPosts, ArrayObject $arrayObject): void
     {
-        self::adminEntriesDoReplacements($ap, $post, 'post');
+        self::adminEntriesDoReplacements($actionsPosts, $arrayObject, 'post');
     }
 
     /**
      * Cope with pages actions
      *
-     * @param      ArrayObject<string, mixed>   $post   Form POST
+     * @param      ArrayObject<string, mixed>   $arrayObject   Form POST
      */
-    public static function adminPagesDoReplacements(PagesBackendActions $ap, ArrayObject $post): void
+    public static function adminPagesDoReplacements(PagesBackendActions $pagesBackendActions, ArrayObject $arrayObject): void
     {
-        self::adminEntriesDoReplacements($ap, $post, 'page');
+        self::adminEntriesDoReplacements($pagesBackendActions, $arrayObject, 'page');
     }
 
     /**
      * Cope with posts/pages action
      *
-     * @param      ArrayObject<string, mixed>           $post   The form POST
+     * @param      ArrayObject<string, mixed>           $arrayObject   The form POST
      * @param      string                               $type   The entries type
      */
-    private static function adminEntriesDoReplacements(ActionsPosts|PagesBackendActions $ap, ArrayObject $post, string $type = 'post'): void
+    private static function adminEntriesDoReplacements(ActionsPosts|PagesBackendActions $actionsPostsPages, ArrayObject $arrayObject, string $type = 'post'): void
     {
-        if (!empty($post['confirmcleanurls'])
+        if (!empty($arrayObject['confirmcleanurls'])
             && App::auth()->check(App::auth()->makePermissions([
                 App::auth()::PERMISSION_ADMIN,
             ]), App::blog()->id())
-            && !empty($post['posturltransform'])
-            && $post['posturltransform'] != 'default') {
+            && !empty($arrayObject['posturltransform'])
+            && $arrayObject['posturltransform'] != 'default') {
             // Do replacements
-            $posts = $ap->getRS();
+            $posts = $actionsPostsPages->getRS();
             if ($posts->rows() !== []) {
                 while ($posts->fetch()) {
                     $post_url = $posts->strField('post_url');
@@ -309,14 +309,14 @@ class BackendBehaviors
                     }
                 }
 
-                $ap->redirect(true, ['upd' => 1]);
+                $actionsPostsPages->redirect(true, ['upd' => 1]);
             } else {
-                $ap->redirect();
+                $actionsPostsPages->redirect();
             }
         } else {
             // Ask confirmation for replacements
             if ($type === 'page') {
-                $ap->beginPage(
+                $actionsPostsPages->beginPage(
                     App::backend()->page()->breadcrumb(
                         [
                             Html::escapeHTML(App::blog()->name()) => '',
@@ -326,7 +326,7 @@ class BackendBehaviors
                     )
                 );
             } else {
-                $ap->beginPage(
+                $actionsPostsPages->beginPage(
                     App::backend()->page()->breadcrumb(
                         [
                             Html::escapeHTML(App::blog()->name()) => '',
@@ -339,7 +339,7 @@ class BackendBehaviors
 
             echo
             (new Form('ap-tweakurl'))
-            ->action($ap->getURI())
+            ->action($actionsPostsPages->getURI())
             ->method('post')
             ->fields([
                 (new Para())->items([
@@ -354,10 +354,10 @@ class BackendBehaviors
                     ->default('default')
                     ->label((new Label(__('Posts URL type:'), Label::INSIDE_TEXT_BEFORE))),
                 ]),
-                (new Text(null, $ap->getCheckboxes())),
+                (new Text(null, $actionsPostsPages->getCheckboxes())),
                 (new Para())->items([
                     (new Submit('ap-tweakurl-do', __('Save'))),
-                    ...$ap->hiddenFields(),
+                    ...$actionsPostsPages->hiddenFields(),
                     (new Hidden(['confirmcleanurls'], 'true')),
                     (new Hidden(['action'], 'cleanurls')),
                     (new Hidden(['process'], ($type === 'post' ? 'Posts' : 'Plugin'))),
@@ -366,7 +366,7 @@ class BackendBehaviors
             ])
             ->render();
 
-            $ap->endPage();
+            $actionsPostsPages->endPage();
         }
     }
 }
