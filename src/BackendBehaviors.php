@@ -285,14 +285,18 @@ class BackendBehaviors
      * @param      ArrayObject<string, mixed>           $arrayObject   The form POST
      * @param      string                               $type   The entries type
      */
-    private static function adminEntriesDoReplacements(ActionsPosts|PagesBackendActions $actionsPostsPages, ArrayObject $arrayObject, string $type = 'post'): void
-    {
+    private static function adminEntriesDoReplacements(
+        ActionsPosts|PagesBackendActions $actionsPostsPages,
+        ArrayObject $arrayObject,
+        string $type = 'post'
+    ): void {
         if (!empty($arrayObject['confirmcleanurls'])
             && App::auth()->check(App::auth()->makePermissions([
                 App::auth()::PERMISSION_ADMIN,
             ]), App::blog()->id())
             && !empty($arrayObject['posturltransform'])
-            && $arrayObject['posturltransform'] != 'default') {
+            && is_string($arrayObject['posturltransform'])
+            && $arrayObject['posturltransform'] !== 'default') {
             // Do replacements
             $posts = $actionsPostsPages->getRS();
             if ($posts->rows() !== []) {
