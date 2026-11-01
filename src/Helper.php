@@ -119,15 +119,15 @@ class Helper extends Text
         $settings = self::$settings;
 
         # Read class settings
-        if (!$format) {
+        if (empty($format)) {
             $format = $settings['format'];
         }
 
-        if (!$search) {
+        if (empty($search)) {
             $search = $settings['search'];
         }
 
-        if (!$replace) {
+        if (empty($replace)) {
             $replace = $settings['replace'];
         }
 
