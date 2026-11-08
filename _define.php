@@ -18,9 +18,9 @@ if (isset($this) && is_object($this) && method_exists($this, 'registerModule') &
         'tweakURLs',
         'Tweaks you posts URLs',
         'xave',
-        '9.0',
+        '10.0',
         [
-            'date'        => '2026-08-03T10:14:46+0200',
+            'date'        => '2026-11-08T10:26:21+0100',
             'requires'    => [['core', '2.40']],
             'permissions' => 'My',
             'type'        => 'plugin',
